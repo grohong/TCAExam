@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E402D32D2BB9A81C008EC645 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D32C2BB9A81C008EC645 /* AppFeature.swift */; };
+		E402D3302BB9A854008EC645 /* AlbumListFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D32F2BB9A854008EC645 /* AlbumListFeature.swift */; };
+		E402D3362BB9AC5A008EC645 /* AlbumClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E402D3352BB9AC5A008EC645 /* AlbumClient.swift */; };
+		E402D3392BB9B36C008EC645 /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = E402D3382BB9B36C008EC645 /* Views */; };
 		E411781E2BB98E5A00160CF1 /* Entities in Frameworks */ = {isa = PBXBuildFile; productRef = E411781D2BB98E5A00160CF1 /* Entities */; };
 		E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E4650C2C2BB996B500177256 /* ComposableArchitecture */; };
 		E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */; };
-		E46E00172BB6906E00CDAA80 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00162BB6906E00CDAA80 /* ContentView.swift */; };
 		E46E00192BB6906F00CDAA80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E00182BB6906F00CDAA80 /* Assets.xcassets */; };
 		E46E001C2BB6906F00CDAA80 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E001B2BB6906F00CDAA80 /* Preview Assets.xcassets */; };
 		E46E00262BB6906F00CDAA80 /* DelightRoomChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00252BB6906F00CDAA80 /* DelightRoomChallengeTests.swift */; };
@@ -27,9 +30,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E402D32C2BB9A81C008EC645 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
+		E402D32F2BB9A854008EC645 /* AlbumListFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListFeature.swift; sourceTree = "<group>"; };
+		E402D3352BB9AC5A008EC645 /* AlbumClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumClient.swift; sourceTree = "<group>"; };
 		E46E00112BB6906E00CDAA80 /* DelightRoomChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DelightRoomChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelightRoomChallengeApp.swift; sourceTree = "<group>"; };
-		E46E00162BB6906E00CDAA80 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E46E00182BB6906F00CDAA80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E46E001B2BB6906F00CDAA80 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E46E00212BB6906F00CDAA80 /* DelightRoomChallengeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DelightRoomChallengeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E402D3392BB9B36C008EC645 /* Views in Frameworks */,
 				E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */,
 				E411781E2BB98E5A00160CF1 /* Entities in Frameworks */,
 			);
@@ -56,10 +62,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E402D32E2BB9A847008EC645 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				E402D32F2BB9A854008EC645 /* AlbumListFeature.swift */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		E402D3342BB9AC4D008EC645 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				E402D3352BB9AC5A008EC645 /* AlbumClient.swift */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
 		E4650C2E2BB996D600177256 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */,
+				E402D32C2BB9A81C008EC645 /* AppFeature.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -94,9 +117,10 @@
 		E46E00132BB6906E00CDAA80 /* DelightRoomChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				E402D3342BB9AC4D008EC645 /* Client */,
+				E402D32E2BB9A847008EC645 /* Features */,
 				E4650C2F2BB9970A00177256 /* SupportingFiles */,
 				E4650C2E2BB996D600177256 /* App */,
-				E46E00162BB6906E00CDAA80 /* ContentView.swift */,
 			);
 			path = DelightRoomChallenge;
 			sourceTree = "<group>";
@@ -136,6 +160,7 @@
 			packageProductDependencies = (
 				E411781D2BB98E5A00160CF1 /* Entities */,
 				E4650C2C2BB996B500177256 /* ComposableArchitecture */,
+				E402D3382BB9B36C008EC645 /* Views */,
 			);
 			productName = DelightRoomChallenge;
 			productReference = E46E00112BB6906E00CDAA80 /* DelightRoomChallenge.app */;
@@ -190,6 +215,7 @@
 			packageReferences = (
 				E411781C2BB98E5A00160CF1 /* XCLocalSwiftPackageReference "Entities" */,
 				E4650C2B2BB996B500177256 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				E402D3372BB9B36B008EC645 /* XCLocalSwiftPackageReference "Views" */,
 			);
 			productRefGroup = E46E00122BB6906E00CDAA80 /* Products */;
 			projectDirPath = "";
@@ -225,7 +251,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E46E00172BB6906E00CDAA80 /* ContentView.swift in Sources */,
+				E402D3362BB9AC5A008EC645 /* AlbumClient.swift in Sources */,
+				E402D32D2BB9A81C008EC645 /* AppFeature.swift in Sources */,
+				E402D3302BB9A854008EC645 /* AlbumListFeature.swift in Sources */,
 				E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,6 +529,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		E402D3372BB9B36B008EC645 /* XCLocalSwiftPackageReference "Views" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Views;
+		};
 		E411781C2BB98E5A00160CF1 /* XCLocalSwiftPackageReference "Entities" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Entities;
@@ -519,6 +551,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E402D3382BB9B36C008EC645 /* Views */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Views;
+		};
 		E411781D2BB98E5A00160CF1 /* Entities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Entities;
