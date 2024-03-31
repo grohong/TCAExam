@@ -47,14 +47,45 @@ struct AlbumListView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-                Text("AlbumListCount")
+            ScrollView {
+                LazyVGrid(
+                    columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 20
+                ) {
+                    ForEach(viewStore.albumList) { ablum in
+                        VStack {
+                            //                            Image(item.imageName) // 앨범 커버나 책 커버 이미지
+                            //                                .resizable()
+                            //                                .aspectRatio(contentMode: .fit)
+                            //                                .cornerRadius(8)
+                            //                                .shadow(radius: 4)
+                            Text(ablum.title) // 제목
+                                .fontWeight(.semibold)
+                            Text(ablum.artist) // 작가 이름
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal)
+                    }
+
+                }
+                .task { viewStore.send(.fetchAblumList) }
             }
-            .padding()
-            .task { viewStore.send(.fetchAblumList) }
+        }
+    }
+}
+
+#Preview {
+    MainActor.assumeIsolated {
+        NavigationStack {
+            AlbumListView(
+                store: Store(initialState: AlbumListFeature.State())
+                {
+                    AlbumListFeature()
+                }
+            )
         }
     }
 }
