@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Entities
+import Views
 
 @Reducer
 struct AlbumListFeature {
@@ -54,16 +55,12 @@ struct AlbumListView: View {
                         GridItem(.flexible())
                     ], spacing: 20
                 ) {
-                    ForEach(viewStore.albumList) { ablum in
+                    ForEach(viewStore.albumList) { album in
                         VStack {
-                            //                            Image(item.imageName) // 앨범 커버나 책 커버 이미지
-                            //                                .resizable()
-                            //                                .aspectRatio(contentMode: .fit)
-                            //                                .cornerRadius(8)
-                            //                                .shadow(radius: 4)
-                            Text(ablum.title) // 제목
+                            MusicThumbnailView(album.musicList.first?.asset)
+                            Text(album.title) // 제목
                                 .fontWeight(.semibold)
-                            Text(ablum.artist) // 작가 이름
+                            Text(album.artist) // 작가 이름
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
