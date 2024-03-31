@@ -12,12 +12,24 @@ import ComposableArchitecture
 struct DelightRoomChallengeApp: App {
     var body: some Scene {
         WindowGroup {
-            AppView(
-                store: Store(initialState: AppFeature.State()) {
-                    AppFeature()
-                        ._printChanges()
-                }
-            )
+            if DebugSettings.isRunningTests {
+                Text("테스트 중입니다")
+            } else {
+                AppView(
+                    store: Store(initialState: AppFeature.State()) {
+                        AppFeature()
+                            ._printChanges()
+                    }
+                )
+            }
         }
     }
 }
+
+#if DEBUG
+class DebugSettings {
+    static var isRunningTests: Bool {
+        return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
+}
+#endif

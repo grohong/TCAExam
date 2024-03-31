@@ -15,12 +15,12 @@ struct AlbumListFeature {
 
     @ObservableState
     struct State: Equatable {
-        var albumList = IdentifiedArrayOf<Album>()
+        var albumList = [Album]()
     }
 
     enum Action: Equatable {
         case fetchAblumList
-        case albumList(IdentifiedArrayOf<Album>)
+        case albumList([Album])
     }
 
     @Dependency(\.albumClient.fetchAlbumList) var fetchAlbumList
@@ -31,7 +31,7 @@ struct AlbumListFeature {
             case .fetchAblumList:
                 return .run { send in
                     let ablumList = await fetchAlbumList()
-                    await send(.albumList(IdentifiedArrayOf(uniqueElements: ablumList)))
+                    await send(.albumList(ablumList))
                 }
             case .albumList(let albumList):
                 state.albumList = albumList

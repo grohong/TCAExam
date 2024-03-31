@@ -16,7 +16,7 @@
 		E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */; };
 		E46E00192BB6906F00CDAA80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E00182BB6906F00CDAA80 /* Assets.xcassets */; };
 		E46E001C2BB6906F00CDAA80 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E001B2BB6906F00CDAA80 /* Preview Assets.xcassets */; };
-		E46E00262BB6906F00CDAA80 /* DelightRoomChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00252BB6906F00CDAA80 /* DelightRoomChallengeTests.swift */; };
+		E4B419FE2BB9E7B3005C716D /* AlbumListFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +38,7 @@
 		E46E00182BB6906F00CDAA80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E46E001B2BB6906F00CDAA80 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E46E00212BB6906F00CDAA80 /* DelightRoomChallengeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DelightRoomChallengeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E46E00252BB6906F00CDAA80 /* DelightRoomChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelightRoomChallengeTests.swift; sourceTree = "<group>"; };
+		E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListFeatureTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,9 +136,17 @@
 		E46E00242BB6906F00CDAA80 /* DelightRoomChallengeTests */ = {
 			isa = PBXGroup;
 			children = (
-				E46E00252BB6906F00CDAA80 /* DelightRoomChallengeTests.swift */,
+				E4B419FC2BB9E79A005C716D /* FeatureTests */,
 			);
 			path = DelightRoomChallengeTests;
+			sourceTree = "<group>";
+		};
+		E4B419FC2BB9E79A005C716D /* FeatureTests */ = {
+			isa = PBXGroup;
+			children = (
+				E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */,
+			);
+			path = FeatureTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,6 +207,7 @@
 					};
 					E46E00202BB6906F00CDAA80 = {
 						CreatedOnToolsVersion = 15.3;
+						LastSwiftMigration = 1530;
 						TestTargetID = E46E00102BB6906E00CDAA80;
 					};
 				};
@@ -262,7 +271,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E46E00262BB6906F00CDAA80 /* DelightRoomChallengeTests.swift in Sources */,
+				E4B419FE2BB9E7B3005C716D /* AlbumListFeatureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,15 +470,17 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Y4TX5PVNK4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = grohong.DelightRoomChallengeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DelightRoomChallenge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DelightRoomChallenge";
@@ -481,11 +492,12 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Y4TX5PVNK4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = grohong.DelightRoomChallengeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
