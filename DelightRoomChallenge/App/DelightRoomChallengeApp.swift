@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct DelightRoomChallengeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppView(
+                store: Store(initialState: AppFeature.State()) {
+                    AppFeature()
+                        ._printChanges()
+                }
+            )
         }
     }
 }
