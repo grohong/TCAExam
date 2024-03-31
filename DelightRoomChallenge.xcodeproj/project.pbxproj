@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E411781E2BB98E5A00160CF1 /* Entities in Frameworks */ = {isa = PBXBuildFile; productRef = E411781D2BB98E5A00160CF1 /* Entities */; };
+		E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E4650C2C2BB996B500177256 /* ComposableArchitecture */; };
 		E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */; };
 		E46E00172BB6906E00CDAA80 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00162BB6906E00CDAA80 /* ContentView.swift */; };
 		E46E00192BB6906F00CDAA80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E00182BB6906F00CDAA80 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */,
 				E411781E2BB98E5A00160CF1 /* Entities in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,6 +56,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E4650C2E2BB996D600177256 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E4650C2F2BB9970A00177256 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				E46E00182BB6906F00CDAA80 /* Assets.xcassets */,
+				E46E001A2BB6906F00CDAA80 /* Preview Content */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
 		E46E00082BB6906E00CDAA80 = {
 			isa = PBXGroup;
 			children = (
@@ -75,10 +94,9 @@
 		E46E00132BB6906E00CDAA80 /* DelightRoomChallenge */ = {
 			isa = PBXGroup;
 			children = (
-				E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */,
+				E4650C2F2BB9970A00177256 /* SupportingFiles */,
+				E4650C2E2BB996D600177256 /* App */,
 				E46E00162BB6906E00CDAA80 /* ContentView.swift */,
-				E46E00182BB6906F00CDAA80 /* Assets.xcassets */,
-				E46E001A2BB6906F00CDAA80 /* Preview Content */,
 			);
 			path = DelightRoomChallenge;
 			sourceTree = "<group>";
@@ -117,6 +135,7 @@
 			name = DelightRoomChallenge;
 			packageProductDependencies = (
 				E411781D2BB98E5A00160CF1 /* Entities */,
+				E4650C2C2BB996B500177256 /* ComposableArchitecture */,
 			);
 			productName = DelightRoomChallenge;
 			productReference = E46E00112BB6906E00CDAA80 /* DelightRoomChallenge.app */;
@@ -170,6 +189,7 @@
 			mainGroup = E46E00082BB6906E00CDAA80;
 			packageReferences = (
 				E411781C2BB98E5A00160CF1 /* XCLocalSwiftPackageReference "Entities" */,
+				E4650C2B2BB996B500177256 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = E46E00122BB6906E00CDAA80 /* Products */;
 			projectDirPath = "";
@@ -355,7 +375,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"DelightRoomChallenge/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"DelightRoomChallenge/SupportingFiles/Preview Content\"";
 				DEVELOPMENT_TEAM = Y4TX5PVNK4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -385,7 +405,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"DelightRoomChallenge/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"DelightRoomChallenge/SupportingFiles/Preview Content\"";
 				DEVELOPMENT_TEAM = Y4TX5PVNK4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -487,10 +507,26 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E4650C2B2BB996B500177256 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		E411781D2BB98E5A00160CF1 /* Entities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Entities;
+		};
+		E4650C2C2BB996B500177256 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E4650C2B2BB996B500177256 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
