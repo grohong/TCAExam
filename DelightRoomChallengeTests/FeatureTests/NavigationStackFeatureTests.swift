@@ -1,5 +1,5 @@
 //
-//  AppFeatureTests.swift
+//  NavigationStackFeatureTests.swift
 //  DelightRoomChallengeTests
 //
 //  Created by Hong Seong Ho on 4/1/24.
@@ -10,12 +10,12 @@ import XCTest
 import ComposableArchitecture
 import Entities
 
-final class AppFeatureTests: XCTestCase {
+final class NavigationStackFeatureTests: XCTestCase {
 
     @MainActor
     func testAlbumNavigation() async {
-        let store = TestStore(initialState: AppFeature.State()) {
-            AppFeature()
+        let store = TestStore(initialState: NavigationStackFeature.State()) {
+            NavigationStackFeature()
         }
 
         let mockAlbum = Album.mockAlbumList.first!
@@ -29,11 +29,11 @@ final class AppFeatureTests: XCTestCase {
         let mockAlbum = Album.mockAlbumList.first!
         let startIndex: Int = .zero
         let store = TestStore(
-            initialState: AppFeature.State(
+            initialState: NavigationStackFeature.State(
                 path: StackState([.album(AlbumFeature.State(album: mockAlbum))])
             )
         ) {
-            AppFeature()
+            NavigationStackFeature()
         }
 
         await store.send(.path(.element(id: 0, action: .album(.delegate(.playAlbum(album: mockAlbum, startIndex: startIndex)))))) {

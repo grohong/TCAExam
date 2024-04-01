@@ -1,5 +1,5 @@
 //
-//  AppFeature.swift
+//  NavigationStackFeature.swift
 //  DelightRoomChallenge
 //
 //  Created by Hong Seong Ho on 3/31/24.
@@ -10,12 +10,13 @@ import ComposableArchitecture
 import Entities
 
 @Reducer
-struct AppFeature {
+struct NavigationStackFeature {
 
     @ObservableState
     struct State: Equatable {
         var path = StackState<Path.State>()
         var albumList = AlbumListFeature.State()
+        var musicPlayer = MusicPlayerFeature.State()
         var playAlbum: Album?
         var albumIndex: Int?
     }
@@ -23,6 +24,7 @@ struct AppFeature {
     enum Action: Equatable {
         case path(StackAction<Path.State, Path.Action>)
         case albumList(AlbumListFeature.Action)
+        case musicPlayer(MusicPlayerFeature.Action)
     }
 
     @Reducer
@@ -71,9 +73,9 @@ struct AppFeature {
     }
 }
 
-struct AppView: View {
+struct NavigationStackView: View {
 
-    let store: StoreOf<AppFeature>
+    let store: StoreOf<NavigationStackFeature>
 
     var body: some View {
         NavigationStackStore(store.scope(state: \.path, action: \.path)) {
@@ -87,8 +89,8 @@ struct AppView: View {
             switch state {
             case .album:
                 CaseLet(
-                    /AppFeature.Path.State.album,
-                     action: AppFeature.Path.Action.album,
+                    /NavigationStackFeature.Path.State.album,
+                     action: NavigationStackFeature.Path.Action.album,
                      then: AlbumView.init(store:)
                 )
             }
@@ -97,25 +99,25 @@ struct AppView: View {
 }
 
 #Preview {
-    AppView(
-        store: Store(initialState: AppFeature.State()) {
-            AppFeature()
+    NavigationStackView(
+        store: Store(initialState: NavigationStackFeature.State()) {
+            NavigationStackFeature()
                 ._printChanges()
         }
     )
 }
 
 #Preview("Album navigation test") {
-    AppView(
+    NavigationStackView(
         store: Store(
-            initialState: AppFeature.State(
+            initialState: NavigationStackFeature.State(
                 path: StackState([
                     .album(AlbumFeature.State(album: Album.mockAlbumList.first!))
                 ])
             )
         ) 
         {
-            AppFeature()
+            NavigationStackFeature()
                 ._printChanges()
         }
     )
