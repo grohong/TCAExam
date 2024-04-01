@@ -17,15 +17,49 @@ struct MusicPlayerFeature {
     struct State: Equatable {
         var music: Music?
         var isPlaying = true
+        var period: Double = .zero
     }
 
     enum Action: Equatable {
-
+        case play
+        case pause
+        case isPlayingChanged(Bool)
+        case periodChanged(Double)
+        case onTask
     }
+
+    @Dependency(\.musicPlayerClient) var musicPlayerClient
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
-            return .none
+            switch action {
+            case .play:
+                return .run { send in
+                    await musicPlayerClient.play()
+                    await send(.isPlayingChanged(true))
+                }
+            case .pause:
+                return .run { send in
+                    await musicPlayerClient.pause()
+                    await send(.isPlayingChanged(false))
+                }
+            case .isPlayingChanged(let isPlaying):
+                state.isPlaying = isPlaying
+                return .none
+            case .periodChanged(let period):
+                state.period = period
+                return .none
+            case .onTask:
+                return .run { send in
+                    await self.onTask(send: send)
+                }
+            }
+        }
+    }
+
+    private func onTask(send: Send<Action>) async {
+        for await music in self.musicPlayerClient.period() {
+            await send(.periodChanged(music))
         }
     }
 }
@@ -37,13 +71,16 @@ struct MusicPlayerView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
-                ProgressView(value: 0.8)
+                ProgressView(value: viewStore.period)
                     .progressViewStyle(LinearProgressViewStyle())
 
                 HStack {
-
                     Button(action: {
-
+                        if viewStore.isPlaying {
+                            viewStore.send(.pause)
+                        } else {
+                            viewStore.send(.play)
+                        }
                     }) {
                         Image(systemName: viewStore.isPlaying ? "pause.circle" : "play.circle")
                             .resizable()
@@ -69,6 +106,7 @@ struct MusicPlayerView: View {
                 .frame(height: 60)
                 .padding()
             }
+            .task { await store.send(.onTask).finish() }
         }
     }
 }

@@ -16,13 +16,11 @@ struct NavigationStackFeature {
     struct State: Equatable {
         var path = StackState<Path.State>()
         var albumList = AlbumListFeature.State()
-        var musicPlayer = MusicPlayerFeature.State()
     }
 
     enum Action: Equatable {
         case path(StackAction<Path.State, Path.Action>)
         case albumList(AlbumListFeature.Action)
-        case musicPlayer(MusicPlayerFeature.Action)
     }
 
     @Reducer
