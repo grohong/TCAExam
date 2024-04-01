@@ -37,7 +37,20 @@ struct MusicPlayerSheetView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
+            VStack {
+                VStack {
+                    Image(systemName: "globe")
+                        .imageScale(.large)
+                        .foregroundStyle(.tint)
+                    Text("MusicPlayerSheet")
+                    Text("currentMusic: \(viewStore.state.music?.title ?? "곡 정보가 없습니다.")")
 
+                    Button("change album") {
+                        Task {  }
+                    }
+                }
+                .padding()
+            }
         }
     }
 }
@@ -46,8 +59,9 @@ struct MusicPlayerSheetView: View {
     MusicPlayerSheetView(
         store: Store(
             initialState: MusicPlayerSheetFeature.State(music: Album.mockAlbumList.first!.musicList.first)
-        )
-        { MusicPlayerSheetFeature() }
+        ) {
+            MusicPlayerSheetFeature()
+        }
     )
 }
 

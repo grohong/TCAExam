@@ -15,12 +15,15 @@ struct MusicPlayerFeature {
 
     @ObservableState
     struct State: Equatable {
+        @Presents var musicPlayerSheet: MusicPlayerSheetFeature.State?
         var music: Music?
         var isPlaying = true
         var period: Double = .zero
     }
 
     enum Action: Equatable {
+        case musicPlayerSheet(PresentationAction<MusicPlayerSheetFeature.Action>)
+        case showMusicPlayerSheet
         case play
         case pause
         case isPlayingChanged(Bool)
@@ -33,6 +36,11 @@ struct MusicPlayerFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .musicPlayerSheet:
+                return .none
+            case .showMusicPlayerSheet:
+                state.musicPlayerSheet = MusicPlayerSheetFeature.State(music: state.music)
+                return .none
             case .play:
                 return .run { send in
                     await musicPlayerClient.play()
@@ -54,6 +62,9 @@ struct MusicPlayerFeature {
                     await self.onTask(send: send)
                 }
             }
+        }
+        .ifLet(\.$musicPlayerSheet, action: \.musicPlayerSheet) {
+            MusicPlayerSheetFeature()
         }
     }
 
@@ -95,18 +106,30 @@ struct MusicPlayerView: View {
                         Text(viewStore.music?.artist ?? "아티스트 정보가 없습니다.")
                             .font(.subheadline)
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture { viewStore.send(.showMusicPlayerSheet) }
 
                     Spacer()
 
                     MusicThumbnailView(viewStore.music?.asset)
                         .frame(width: 50, height: 50)
-
-
+                        .id(viewStore.music?.id)
+                        .onTapGesture { viewStore.send(.showMusicPlayerSheet) }
                 }
                 .frame(height: 60)
                 .padding()
             }
             .task { await store.send(.onTask).finish() }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$musicPlayerSheet,
+                    action: \.musicPlayerSheet
+                )
+            ) { store in
+                NavigationStack {
+                    MusicPlayerSheetView(store: store)
+                }
+            }
         }
     }
 }
