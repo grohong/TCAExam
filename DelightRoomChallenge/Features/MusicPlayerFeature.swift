@@ -15,17 +15,19 @@ struct MusicPlayerFeature {
 
     @ObservableState
     struct State: Equatable {
-        @Presents var musicPlayerSheet: MusicPlayerSheetFeature.State?
+        var isSheetPresented: Bool = false
         var music: Music?
         var isPlaying = true
         var period: Double = .zero
     }
 
     enum Action: Equatable {
-        case musicPlayerSheet(PresentationAction<MusicPlayerSheetFeature.Action>)
-        case showMusicPlayerSheet
+        case showSheet
+        case hideSheet
         case play
         case pause
+        case nextPlay
+        case prevPlay
         case isPlayingChanged(Bool)
         case periodChanged(Double)
         case onTask
@@ -36,10 +38,11 @@ struct MusicPlayerFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .musicPlayerSheet:
+            case .showSheet:
+                state.isSheetPresented = true
                 return .none
-            case .showMusicPlayerSheet:
-                state.musicPlayerSheet = MusicPlayerSheetFeature.State(music: state.music)
+            case .hideSheet:
+                state.isSheetPresented = false
                 return .none
             case .play:
                 return .run { send in
@@ -50,6 +53,14 @@ struct MusicPlayerFeature {
                 return .run { send in
                     await musicPlayerClient.pause()
                     await send(.isPlayingChanged(false))
+                }
+            case .nextPlay:
+                return .run { _ in
+                    await musicPlayerClient.nextPlay()
+                }
+            case .prevPlay:
+                return .run { _ in
+                    await musicPlayerClient.prevPlay()
                 }
             case .isPlayingChanged(let isPlaying):
                 state.isPlaying = isPlaying
@@ -63,9 +74,6 @@ struct MusicPlayerFeature {
                 }
             }
         }
-        .ifLet(\.$musicPlayerSheet, action: \.musicPlayerSheet) {
-            MusicPlayerSheetFeature()
-        }
     }
 
     private func onTask(send: Send<Action>) async {
@@ -78,6 +86,7 @@ struct MusicPlayerFeature {
 struct MusicPlayerView: View {
 
     let store: StoreOf<MusicPlayerFeature>
+    @State private var progress = 0.0
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -107,27 +116,90 @@ struct MusicPlayerView: View {
                             .font(.subheadline)
                     }
                     .contentShape(Rectangle())
-                    .onTapGesture { viewStore.send(.showMusicPlayerSheet) }
+                    .onTapGesture { viewStore.send(.showSheet) }
 
                     Spacer()
 
                     MusicThumbnailView(viewStore.music?.asset)
                         .frame(width: 50, height: 50)
                         .id(viewStore.music?.id)
-                        .onTapGesture { viewStore.send(.showMusicPlayerSheet) }
+                        .onTapGesture { viewStore.send(.showSheet) }
                 }
                 .frame(height: 60)
                 .padding()
             }
             .task { await store.send(.onTask).finish() }
             .sheet(
-                store: self.store.scope(
-                    state: \.$musicPlayerSheet,
-                    action: \.musicPlayerSheet
+                isPresented: viewStore.binding(
+                    get: \.isSheetPresented,
+                    send: { _ in .hideSheet }
                 )
-            ) { store in
-                NavigationStack {
-                    MusicPlayerSheetView(store: store)
+            ) {
+                VStack {
+                    HStack {
+                        Button(action: {
+                            viewStore.send(.hideSheet)
+                        }) {
+                            Image(systemName: "chevron.down")
+                                .resizable()
+                                .frame(width: 20, height: 10)
+                        }
+                        Spacer()
+                        VStack {
+                            Text(viewStore.music?.title ?? "곡 정보가 없습니다.")
+                                .font(.title3)
+                                .fontWeight(.medium)
+                                .lineLimit(1)
+                            Text(viewStore.music?.artist ?? "아티스트 정보가 없습니다.")
+                                .font(.subheadline)
+                                .lineLimit(1)
+                        }
+                        .padding(.horizontal)
+                        Spacer()
+                    }
+                    .padding()
+                    .frame(height: 50)
+
+                    Divider()
+
+                    HStack {
+                        Spacer()
+                        MusicThumbnailView(viewStore.music?.asset)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .id(viewStore.music?.id)
+                            .cornerRadius(8)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+
+                    HStack(spacing: 60) {
+                        Button(action: {
+                            viewStore.send(.prevPlay)
+                        }) { Image(systemName: "backward.fill") }
+
+                        Button(action: {
+                            if viewStore.isPlaying {
+                                viewStore.send(.pause)
+                            } else {
+                                viewStore.send(.play)
+                            }
+                        }) {
+                            Image(systemName: viewStore.isPlaying ? "pause.fill" : "play.fill")
+                        }
+
+                        Button(action: {
+                            viewStore.send(.nextPlay)
+                        }) { Image(systemName: "forward.fill") }
+                    }
+                    .font(.largeTitle)
+                    .padding()
+
+                    Slider(value: $progress, in: 0...1, step: 0.01)
+                        .accentColor(.blue)
+                        .padding()
+
+                    ProgressView(value: viewStore.period)
+                        .progressViewStyle(LinearProgressViewStyle())
                 }
             }
         }
@@ -137,8 +209,12 @@ struct MusicPlayerView: View {
 #Preview {
     MusicPlayerView(
         store: Store(
-            initialState: MusicPlayerFeature.State(music: Album.mockAlbumList.first!.musicList.first)
-        )
-        { MusicPlayerFeature() }
+            initialState: MusicPlayerFeature.State(
+                isSheetPresented: true,
+                music: Album.mockAlbumList.first!.musicList.first
+            )
+        ) {
+            MusicPlayerFeature()
+        }
     )
 }
