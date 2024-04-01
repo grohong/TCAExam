@@ -7,13 +7,15 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Entities
+import Views
 
 @Reducer
 struct AlbumFeature {
 
     @ObservableState
     struct State: Equatable {
-
+        var album: Album
     }
 
     enum Action: Equatable {
@@ -31,16 +33,33 @@ struct AlbumView: View {
 
     let store: StoreOf<AlbumFeature>
 
-
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-                Text("AlbumDetail")
+                AlbumHeaderView(album: viewStore.album)
+
+                Divider()
+                    .padding(.horizontal)
+
+                PlayerControlView(
+                    playAction: { },
+                    shuffleAction: { }
+                )
+
+                MusicListView(musicList: viewStore.album.musicList)
             }
-            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+#Preview {
+    MainActor.assumeIsolated {
+        NavigationStack {
+            AlbumView(
+                store: Store(initialState: AlbumFeature.State(album: Album.mockAlbumList.first!)) 
+                { AlbumFeature() }
+            )
         }
     }
 }

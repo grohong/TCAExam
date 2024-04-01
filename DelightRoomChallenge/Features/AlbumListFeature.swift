@@ -56,7 +56,7 @@ struct AlbumListView: View {
                 ) {
                     ForEach(viewStore.albumList) { album in
                         NavigationLink(
-                            state: AppFeature.Path.State.album(AlbumFeature.State())
+                            state: AppFeature.Path.State.album(AlbumFeature.State(album: album))
                         ) {
                             AlbumCardView(album: album)
                         }
@@ -78,9 +78,7 @@ struct AlbumListView: View {
         NavigationStack {
             AlbumListView(
                 store: Store(initialState: AlbumListFeature.State())
-                {
-                    AlbumListFeature()
-                }
+                {  AlbumListFeature() }
             )
         }
     }

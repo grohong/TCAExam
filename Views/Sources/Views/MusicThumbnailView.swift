@@ -56,7 +56,6 @@ extension AVAsset: ThumbnailGeneratable {
 
     public var thumbnail: UIImage? {
         get async {
-            let metadata = try? await self.loadCommonMetadata()
             guard let metadata = try? await self.loadCommonMetadata(),
                   let artworkMetadata = metadata.first(where: { $0.commonKey == .commonKeyArtwork }),
                   let imageData = try? await artworkMetadata.load(.dataValue) else { return nil }
@@ -81,3 +80,11 @@ extension AVAsset: ThumbnailGeneratable {
     }
 }
 
+import Entities
+
+struct MusicThumbnailViewPreviews: PreviewProvider {
+    static var previews: some View {
+        MusicThumbnailView(Album.mockAlbumList.first!.musicList.first!.asset)
+            .previewLayout(.fixed(width: 150, height: 150))
+    }
+}

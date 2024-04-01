@@ -18,8 +18,9 @@ final class AppFeatureTests: XCTestCase {
             AppFeature()
         }
 
-        await store.send(.path(.push(id: 0, state: .album(AlbumFeature.State())))) {
-            $0.path[id: 0] = .album(AlbumFeature.State())
+        let mockAlbum = Album.mockAlbumList.first!
+        await store.send(.path(.push(id: 0, state: .album(AlbumFeature.State(album: mockAlbum))))) {
+            $0.path[id: 0] = .album(AlbumFeature.State(album: mockAlbum))
         }
     }
 }

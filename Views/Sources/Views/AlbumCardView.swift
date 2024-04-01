@@ -29,3 +29,10 @@ public struct AlbumCardView: View {
         .padding(.horizontal)
     }
 }
+
+struct AlbumCardViewPreviews: PreviewProvider {
+    static var previews: some View {
+        AlbumCardView(album: Album.mockAlbumList.first!)
+            .previewLayout(.fixed(width: 150, height: 150))
+    }
+}

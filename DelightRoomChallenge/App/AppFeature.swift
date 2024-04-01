@@ -95,15 +95,18 @@ struct AppView: View {
     )
 }
 
+import Entities
+
 #Preview("Album navigation test") {
     AppView(
         store: Store(
             initialState: AppFeature.State(
                 path: StackState([
-                    .album(AlbumFeature.State())
+                    .album(AlbumFeature.State(album: Album.mockAlbumList.first!))
                 ])
             )
-        ) {
+        ) 
+        {
             AppFeature()
                 ._printChanges()
         }
