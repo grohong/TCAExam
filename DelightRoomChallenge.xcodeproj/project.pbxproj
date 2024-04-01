@@ -18,6 +18,7 @@
 		E46E00192BB6906F00CDAA80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E00182BB6906F00CDAA80 /* Assets.xcassets */; };
 		E46E001C2BB6906F00CDAA80 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E001B2BB6906F00CDAA80 /* Preview Assets.xcassets */; };
 		E4B419FE2BB9E7B3005C716D /* AlbumListFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */; };
+		E4C09F562BBA879500567B2D /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C09F552BBA879500567B2D /* AppFeatureTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,7 @@
 		E46E001B2BB6906F00CDAA80 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E46E00212BB6906F00CDAA80 /* DelightRoomChallengeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DelightRoomChallengeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListFeatureTests.swift; sourceTree = "<group>"; };
+		E4C09F552BBA879500567B2D /* AppFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeatureTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */,
+				E4C09F552BBA879500567B2D /* AppFeatureTests.swift */,
 			);
 			path = FeatureTests;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4C09F562BBA879500567B2D /* AppFeatureTests.swift in Sources */,
 				E4B419FE2BB9E7B3005C716D /* AlbumListFeatureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
