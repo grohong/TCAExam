@@ -49,6 +49,11 @@ struct AppFeature {
 
         Reduce { state, action in
             switch action {
+            case .path(.element(_, action: .album(.delegate(let action)))):
+                switch action {
+                case .playAlbum:
+                    return .none
+                }
             case .path:
                 return .none
             case .albumList:
