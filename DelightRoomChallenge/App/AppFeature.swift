@@ -85,3 +85,27 @@ struct AppView: View {
         }
     }
 }
+
+#Preview {
+    AppView(
+        store: Store(initialState: AppFeature.State()) {
+            AppFeature()
+                ._printChanges()
+        }
+    )
+}
+
+#Preview("Album navigation test") {
+    AppView(
+        store: Store(
+            initialState: AppFeature.State(
+                path: StackState([
+                    .album(AlbumFeature.State())
+                ])
+            )
+        ) {
+            AppFeature()
+                ._printChanges()
+        }
+    )
+}
