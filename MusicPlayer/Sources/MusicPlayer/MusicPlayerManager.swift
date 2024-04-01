@@ -47,7 +47,7 @@ public actor MusicPlayerManager {
 
     public func nextPlay() async {
         let nextPlayIndex = currentPlayIndex + 1
-        if nextPlayIndex < musicList.count - 1 {
+        if nextPlayIndex <= musicList.count - 1 {
             currentPlayIndex = nextPlayIndex
         } else {
             currentPlayIndex = .zero

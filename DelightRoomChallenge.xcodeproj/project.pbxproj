@@ -16,7 +16,6 @@
 		E46387432BBB065E00A6C72D /* MusicPlayerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387422BBB065E00A6C72D /* MusicPlayerClient.swift */; };
 		E46387452BBB08A200A6C72D /* MusicPlayerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387442BBB08A200A6C72D /* MusicPlayerFeature.swift */; };
 		E46387472BBB166C00A6C72D /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387462BBB166C00A6C72D /* AppFeature.swift */; };
-		E46387492BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387482BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift */; };
 		E463874B2BBB23AF00A6C72D /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463874A2BBB23AF00A6C72D /* AppFeatureTests.swift */; };
 		E463874F2BBB359400A6C72D /* MusicPlayerFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463874E2BBB359400A6C72D /* MusicPlayerFeatureTests.swift */; };
 		E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E4650C2C2BB996B500177256 /* ComposableArchitecture */; };
@@ -46,7 +45,6 @@
 		E46387422BBB065E00A6C72D /* MusicPlayerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerClient.swift; sourceTree = "<group>"; };
 		E46387442BBB08A200A6C72D /* MusicPlayerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerFeature.swift; sourceTree = "<group>"; };
 		E46387462BBB166C00A6C72D /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
-		E46387482BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerSheetFeature.swift; sourceTree = "<group>"; };
 		E463874A2BBB23AF00A6C72D /* AppFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeatureTests.swift; sourceTree = "<group>"; };
 		E463874E2BBB359400A6C72D /* MusicPlayerFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerFeatureTests.swift; sourceTree = "<group>"; };
 		E46E00112BB6906E00CDAA80 /* DelightRoomChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DelightRoomChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,7 +84,6 @@
 				E402D32F2BB9A854008EC645 /* AlbumListFeature.swift */,
 				E41586DE2BB9EB90005CADD3 /* AlbumFeature.swift */,
 				E46387442BBB08A200A6C72D /* MusicPlayerFeature.swift */,
-				E46387482BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -291,7 +288,6 @@
 				E46387472BBB166C00A6C72D /* AppFeature.swift in Sources */,
 				E402D3362BB9AC5A008EC645 /* AlbumClient.swift in Sources */,
 				E46387452BBB08A200A6C72D /* MusicPlayerFeature.swift in Sources */,
-				E46387492BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift in Sources */,
 				E402D32D2BB9A81C008EC645 /* NavigationStackFeature.swift in Sources */,
 				E41586DF2BB9EB90005CADD3 /* AlbumFeature.swift in Sources */,
 				E46387432BBB065E00A6C72D /* MusicPlayerClient.swift in Sources */,

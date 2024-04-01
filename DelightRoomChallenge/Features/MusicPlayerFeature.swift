@@ -15,14 +15,19 @@ struct MusicPlayerFeature {
 
     @ObservableState
     struct State: Equatable {
+        var isSheetPresented: Bool = false
         var music: Music?
         var isPlaying = true
         var period: Double = .zero
     }
 
     enum Action: Equatable {
+        case showSheet
+        case hideSheet
         case play
         case pause
+        case nextPlay
+        case prevPlay
         case isPlayingChanged(Bool)
         case periodChanged(Double)
         case onTask
@@ -33,6 +38,12 @@ struct MusicPlayerFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .showSheet:
+                state.isSheetPresented = true
+                return .none
+            case .hideSheet:
+                state.isSheetPresented = false
+                return .none
             case .play:
                 return .run { send in
                     await musicPlayerClient.play()
@@ -43,6 +54,10 @@ struct MusicPlayerFeature {
                     await musicPlayerClient.pause()
                     await send(.isPlayingChanged(false))
                 }
+            case .nextPlay:
+                return .run { _ in await musicPlayerClient.nextPlay() }
+            case .prevPlay:
+                return .run { _ in await musicPlayerClient.prevPlay() }
             case .isPlayingChanged(let isPlaying):
                 state.isPlaying = isPlaying
                 return .none
@@ -70,43 +85,41 @@ struct MusicPlayerView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack {
-                ProgressView(value: viewStore.period)
-                    .progressViewStyle(LinearProgressViewStyle())
-
-                HStack {
-                    Button(action: {
-                        if viewStore.isPlaying {
-                            viewStore.send(.pause)
-                        } else {
-                            viewStore.send(.play)
-                        }
-                    }) {
-                        Image(systemName: viewStore.isPlaying ? "pause.circle" : "play.circle")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
-
-                    Spacer()
-
-                    VStack(alignment: .leading) {
-                        Text(viewStore.music?.title ?? "곡 정보가 없습니다.")
-                            .font(.headline)
-                        Text(viewStore.music?.artist ?? "아티스트 정보가 없습니다.")
-                            .font(.subheadline)
-                    }
-
-                    Spacer()
-
-                    MusicThumbnailView(viewStore.music?.asset)
-                        .frame(width: 50, height: 50)
-
-
-                }
-                .frame(height: 60)
-                .padding()
-            }
+            MusicPlayerMiniView(
+                playAction: { viewStore.send(.play) },
+                pauseAction: { viewStore.send(.pause) },
+                tapAction: { viewStore.send(.showSheet) },
+                period: viewStore.period,
+                isPlaying: viewStore.isPlaying,
+                music: viewStore.music
+            )
             .task { await store.send(.onTask).finish() }
+            .sheet(
+                isPresented: viewStore.binding(
+                    get: \.isSheetPresented,
+                    send: { _ in .hideSheet }
+                )
+            ) {
+                MusicPlayerSheetView(
+                    action: { actionKind in
+                        switch actionKind {
+                        case .play:
+                            viewStore.send(.play)
+                        case .pause:
+                            viewStore.send(.pause)
+                        case .nextPlay:
+                            viewStore.send(.nextPlay)
+                        case .prevPlay:
+                            viewStore.send(.prevPlay)
+                        case .hide:
+                            viewStore.send(.hideSheet)
+                        }
+                    },
+                    period: viewStore.period,
+                    isPlaying: viewStore.isPlaying,
+                    music: viewStore.music
+                )
+            }
         }
     }
 }
@@ -114,8 +127,12 @@ struct MusicPlayerView: View {
 #Preview {
     MusicPlayerView(
         store: Store(
-            initialState: MusicPlayerFeature.State(music: Album.mockAlbumList.first!.musicList.first)
-        )
-        { MusicPlayerFeature() }
+            initialState: MusicPlayerFeature.State(
+                isSheetPresented: true,
+                music: Album.mockAlbumList.first!.musicList.first
+            )
+        ) {
+            MusicPlayerFeature()
+        }
     )
 }
