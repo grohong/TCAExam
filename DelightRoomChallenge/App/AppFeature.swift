@@ -21,6 +21,8 @@ struct AppFeature {
     enum Action: Equatable {
         case navigationStack(NavigationStackFeature.Action)
         case musicPlayer(MusicPlayerFeature.Action)
+        case currentMusic(Music?)
+        case onTask
     }
 
     @Dependency(\.musicPlayerClient) var musicPlayerClient
@@ -36,8 +38,26 @@ struct AppFeature {
             case .navigationStack(.path(.element(_, action: .album(.delegate(let action))))):
                 switch action {
                 case .playAlbum(let album, let index):
-                    state.musicPlayer = MusicPlayerFeature.State(music: album.musicList[index])
-                    return .none
+                    return .run { _ in
+                        await musicPlayerClient.startAlbum((album.musicList, index))
+                    }
+                }
+            case .currentMusic(let music):
+                if state.musicPlayer != nil {
+                    if let music {
+                        state.musicPlayer?.music = music
+                    } else {
+                        state.musicPlayer = nil
+                    }
+                } else {
+                    if let music {
+                        state.musicPlayer = MusicPlayerFeature.State(music: music)
+                    }
+                }
+                return .none
+            case .onTask:
+                return .run { send in
+                    await self.onTask(send: send)
                 }
             default:
                 return .none
@@ -45,6 +65,12 @@ struct AppFeature {
         }
         .ifLet(\.musicPlayer, action: \.musicPlayer) {
             MusicPlayerFeature()
+        }
+    }
+
+    private func onTask(send: Send<Action>) async {
+        for await music in self.musicPlayerClient.currentMusic() {
+            await send(.currentMusic(music))
         }
     }
 }
@@ -56,7 +82,7 @@ struct AppFeatureView: View {
     var body: some View {
         VStack {
             NavigationStackView(
-                store: self.store.scope(
+                store: store.scope(
                     state: \.navigationStack,
                     action: \.navigationStack
                 )
@@ -66,6 +92,7 @@ struct AppFeatureView: View {
                 MusicPlayerView(store: musicPlayerStore)
             }
         }
+        .task { await store.send(.onTask).finish() }
     }
 }
 
