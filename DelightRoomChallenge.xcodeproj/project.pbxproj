@@ -13,6 +13,7 @@
 		E402D3392BB9B36C008EC645 /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = E402D3382BB9B36C008EC645 /* Views */; };
 		E411781E2BB98E5A00160CF1 /* Entities in Frameworks */ = {isa = PBXBuildFile; productRef = E411781D2BB98E5A00160CF1 /* Entities */; };
 		E41586DF2BB9EB90005CADD3 /* AlbumFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41586DE2BB9EB90005CADD3 /* AlbumFeature.swift */; };
+		E46387432BBB065E00A6C72D /* MusicPlayerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387422BBB065E00A6C72D /* MusicPlayerClient.swift */; };
 		E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E4650C2C2BB996B500177256 /* ComposableArchitecture */; };
 		E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */; };
 		E46E00192BB6906F00CDAA80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E00182BB6906F00CDAA80 /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 		E402D32F2BB9A854008EC645 /* AlbumListFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumListFeature.swift; sourceTree = "<group>"; };
 		E402D3352BB9AC5A008EC645 /* AlbumClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumClient.swift; sourceTree = "<group>"; };
 		E41586DE2BB9EB90005CADD3 /* AlbumFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumFeature.swift; sourceTree = "<group>"; };
+		E46387422BBB065E00A6C72D /* MusicPlayerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerClient.swift; sourceTree = "<group>"; };
 		E46E00112BB6906E00CDAA80 /* DelightRoomChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DelightRoomChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelightRoomChallengeApp.swift; sourceTree = "<group>"; };
 		E46E00182BB6906F00CDAA80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				E402D3352BB9AC5A008EC645 /* AlbumClient.swift */,
+				E46387422BBB065E00A6C72D /* MusicPlayerClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				E402D3362BB9AC5A008EC645 /* AlbumClient.swift in Sources */,
 				E402D32D2BB9A81C008EC645 /* AppFeature.swift in Sources */,
 				E41586DF2BB9EB90005CADD3 /* AlbumFeature.swift in Sources */,
+				E46387432BBB065E00A6C72D /* MusicPlayerClient.swift in Sources */,
 				E402D3302BB9A854008EC645 /* AlbumListFeature.swift in Sources */,
 				E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */,
 			);
