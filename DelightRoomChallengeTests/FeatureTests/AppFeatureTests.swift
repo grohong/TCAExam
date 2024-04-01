@@ -23,5 +23,22 @@ final class AppFeatureTests: XCTestCase {
             $0.path[id: 0] = .album(AlbumFeature.State(album: mockAlbum))
         }
     }
-}
 
+    @MainActor
+    func testPlayAlbum() async {
+        let mockAlbum = Album.mockAlbumList.first!
+        let startIndex: Int = .zero
+        let store = TestStore(
+            initialState: AppFeature.State(
+                path: StackState([.album(AlbumFeature.State(album: mockAlbum))])
+            )
+        ) {
+            AppFeature()
+        }
+
+        await store.send(.path(.element(id: 0, action: .album(.delegate(.playAlbum(album: mockAlbum, startIndex: startIndex)))))) {
+            $0.playAlbum = mockAlbum
+            $0.albumIndex = startIndex
+        }
+    }
+}

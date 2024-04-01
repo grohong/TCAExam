@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import Entities
 
 @Reducer
 struct AppFeature {
@@ -15,6 +16,8 @@ struct AppFeature {
     struct State: Equatable {
         var path = StackState<Path.State>()
         var albumList = AlbumListFeature.State()
+        var playAlbum: Album?
+        var albumIndex: Int?
     }
 
     enum Action: Equatable {
@@ -51,7 +54,9 @@ struct AppFeature {
             switch action {
             case .path(.element(_, action: .album(.delegate(let action)))):
                 switch action {
-                case .playAlbum:
+                case .playAlbum(let album, let index):
+                    state.playAlbum = album
+                    state.albumIndex = index
                     return .none
                 }
             case .path:
@@ -99,8 +104,6 @@ struct AppView: View {
         }
     )
 }
-
-import Entities
 
 #Preview("Album navigation test") {
     AppView(
