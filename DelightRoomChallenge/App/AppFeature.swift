@@ -21,7 +21,7 @@ struct AppFeature {
     enum Action: Equatable {
         case navigationStack(NavigationStackFeature.Action)
         case musicPlayer(MusicPlayerFeature.Action)
-        case currentMusic(Music?)
+        case currentMusicChanged(Music?)
         case onTask
     }
 
@@ -42,7 +42,7 @@ struct AppFeature {
                         await musicPlayerClient.startAlbum((album.musicList, index))
                     }
                 }
-            case .currentMusic(let music):
+            case .currentMusicChanged(let music):
                 if state.musicPlayer != nil {
                     if let music {
                         state.musicPlayer?.music = music
@@ -70,7 +70,7 @@ struct AppFeature {
 
     private func onTask(send: Send<Action>) async {
         for await music in self.musicPlayerClient.currentMusic() {
-            await send(.currentMusic(music))
+            await send(.currentMusicChanged(music))
         }
     }
 }
