@@ -2,7 +2,7 @@
 //  AppFeature.swift
 //  DelightRoomChallenge
 //
-//  Created by Hong Seong Ho on 3/31/24.
+//  Created by Hong Seong Ho on 4/2/24.
 //
 
 import SwiftUI
@@ -14,107 +14,91 @@ struct AppFeature {
 
     @ObservableState
     struct State: Equatable {
-        var path = StackState<Path.State>()
-        var albumList = AlbumListFeature.State()
-        var playAlbum: Album?
-        var albumIndex: Int?
+        var navigationStack = NavigationStackFeature.State()
+        var musicPlayer: MusicPlayerFeature.State?
     }
 
     enum Action: Equatable {
-        case path(StackAction<Path.State, Path.Action>)
-        case albumList(AlbumListFeature.Action)
+        case navigationStack(NavigationStackFeature.Action)
+        case musicPlayer(MusicPlayerFeature.Action)
+        case currentMusicChanged(Music?)
+        case onTask
     }
 
-    @Reducer
-    struct Path {
-
-        @ObservableState
-        enum State: Equatable {
-            case album(AlbumFeature.State)
-        }
-
-        enum Action: Equatable {
-            case album(AlbumFeature.Action)
-        }
-
-        var body: some Reducer<State, Action> {
-            Scope(state: /State.album, action: /Action.album) {
-                AlbumFeature()
-            }
-        }
-    }
+    @Dependency(\.musicPlayerClient) var musicPlayerClient
 
     var body: some Reducer<State, Action> {
 
-        Scope(state: \.albumList, action: /Action.albumList) {
-            AlbumListFeature()
+        Scope(state: \.navigationStack, action: /Action.navigationStack) {
+            NavigationStackFeature()
         }
 
         Reduce { state, action in
             switch action {
-            case .path(.element(_, action: .album(.delegate(let action)))):
+            case .navigationStack(.path(.element(_, action: .album(.delegate(let action))))):
                 switch action {
                 case .playAlbum(let album, let index):
-                    state.playAlbum = album
-                    state.albumIndex = index
-                    return .none
+                    return .run { _ in
+                        await musicPlayerClient.startAlbum((album.musicList, index))
+                    }
                 }
-            case .path:
+            case .currentMusicChanged(let music):
+                if state.musicPlayer != nil {
+                    if let music {
+                        state.musicPlayer?.music = music
+                    } else {
+                        state.musicPlayer = nil
+                    }
+                } else {
+                    if let music {
+                        state.musicPlayer = MusicPlayerFeature.State(music: music)
+                    }
+                }
                 return .none
-            case .albumList:
+            case .onTask:
+                return .run { send in
+                    await self.onTask(send: send)
+                }
+            default:
                 return .none
             }
         }
-        .forEach(\.path, action: /Action.path) {
-            Path()
+        .ifLet(\.musicPlayer, action: \.musicPlayer) {
+            MusicPlayerFeature()
+        }
+    }
+
+    private func onTask(send: Send<Action>) async {
+        for await music in self.musicPlayerClient.currentMusic() {
+            await send(.currentMusicChanged(music))
         }
     }
 }
 
-struct AppView: View {
+struct AppFeatureView: View {
 
     let store: StoreOf<AppFeature>
 
     var body: some View {
-        NavigationStackStore(store.scope(state: \.path, action: \.path)) {
-            AlbumListView(
+        VStack {
+            NavigationStackView(
                 store: store.scope(
-                    state: \.albumList,
-                    action: \.albumList
+                    state: \.navigationStack,
+                    action: \.navigationStack
                 )
             )
-        } destination: { state in
-            switch state {
-            case .album:
-                CaseLet(
-                    /AppFeature.Path.State.album,
-                     action: AppFeature.Path.Action.album,
-                     then: AlbumView.init(store:)
-                )
+
+            if let musicPlayerStore = store.scope(state: \.musicPlayer, action: \.musicPlayer) {
+                MusicPlayerView(store: musicPlayerStore)
             }
         }
+        .task { await store.send(.onTask).finish() }
     }
 }
 
 #Preview {
-    AppView(
+    AppFeatureView(
         store: Store(initialState: AppFeature.State()) {
-            AppFeature()
-                ._printChanges()
-        }
-    )
-}
-
-#Preview("Album navigation test") {
-    AppView(
-        store: Store(
-            initialState: AppFeature.State(
-                path: StackState([
-                    .album(AlbumFeature.State(album: Album.mockAlbumList.first!))
-                ])
-            )
-        ) 
-        {
             AppFeature()
                 ._printChanges()
         }

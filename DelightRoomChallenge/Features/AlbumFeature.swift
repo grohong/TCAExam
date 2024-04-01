@@ -72,12 +72,8 @@ struct AlbumView: View {
 }
 
 #Preview {
-    MainActor.assumeIsolated {
-        NavigationStack {
-            AlbumView(
-                store: Store(initialState: AlbumFeature.State(album: Album.mockAlbumList.first!)) 
-                { AlbumFeature() }
-            )
-        }
-    }
+    AlbumView(
+        store: Store(initialState: AlbumFeature.State(album: Album.mockAlbumList.first!)) 
+        { AlbumFeature() }
+    )
 }
