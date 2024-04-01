@@ -13,6 +13,28 @@ import Entities
 final class MusicPlayerFeatureTests: XCTestCase {
 
     @MainActor
+    func testShowSheet() async {
+        let store = TestStore(initialState: MusicPlayerFeature.State()) {
+            MusicPlayerFeature()
+        }
+
+        await store.send(.showSheet) {
+            $0.isSheetPresented = true
+        }
+    }
+
+    @MainActor
+    func testHideSheet() async {
+        let store = TestStore(initialState: MusicPlayerFeature.State(isSheetPresented: true)) {
+            MusicPlayerFeature()
+        }
+
+        await store.send(.hideSheet) {
+            $0.isSheetPresented = false
+        }
+    }
+
+    @MainActor
     func testPause() async {
         let store = TestStore(initialState: MusicPlayerFeature.State()) {
             MusicPlayerFeature()

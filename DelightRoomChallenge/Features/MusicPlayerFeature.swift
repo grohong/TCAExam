@@ -55,13 +55,9 @@ struct MusicPlayerFeature {
                     await send(.isPlayingChanged(false))
                 }
             case .nextPlay:
-                return .run { _ in
-                    await musicPlayerClient.nextPlay()
-                }
+                return .run { _ in await musicPlayerClient.nextPlay() }
             case .prevPlay:
-                return .run { _ in
-                    await musicPlayerClient.prevPlay()
-                }
+                return .run { _ in await musicPlayerClient.prevPlay() }
             case .isPlayingChanged(let isPlaying):
                 state.isPlaying = isPlaying
                 return .none
