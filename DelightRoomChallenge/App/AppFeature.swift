@@ -15,12 +15,12 @@ struct AppFeature {
     @ObservableState
     struct State: Equatable {
         var navigationStack = NavigationStackFeature.State()
-        var playAlbum: Album?
-        var albumIndex: Int?
+        var musicPlayer: MusicPlayerFeature.State?
     }
 
     enum Action: Equatable {
         case navigationStack(NavigationStackFeature.Action)
+        case musicPlayer(MusicPlayerFeature.Action)
     }
 
     @Dependency(\.musicPlayerClient) var musicPlayerClient
@@ -36,13 +36,15 @@ struct AppFeature {
             case .navigationStack(.path(.element(_, action: .album(.delegate(let action))))):
                 switch action {
                 case .playAlbum(let album, let index):
-                    state.playAlbum = album
-                    state.albumIndex = index
+                    state.musicPlayer = MusicPlayerFeature.State(music: album.musicList[index])
                     return .none
                 }
             default:
                 return .none
             }
+        }
+        .ifLet(\.musicPlayer, action: \.musicPlayer) {
+            MusicPlayerFeature()
         }
     }
 }
@@ -52,12 +54,18 @@ struct AppFeatureView: View {
     let store: StoreOf<AppFeature>
 
     var body: some View {
-        NavigationStackView(
-            store: self.store.scope(
-                state: \.navigationStack,
-                action: \.navigationStack
+        VStack {
+            NavigationStackView(
+                store: self.store.scope(
+                    state: \.navigationStack,
+                    action: \.navigationStack
+                )
             )
-        )
+
+            if let musicPlayerStore = store.scope(state: \.musicPlayer, action: \.musicPlayer) {
+                MusicPlayerView(store: musicPlayerStore)
+            }
+        }
     }
 }
 
