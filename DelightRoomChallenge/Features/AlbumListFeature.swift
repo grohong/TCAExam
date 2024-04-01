@@ -15,12 +15,12 @@ struct AlbumListFeature {
 
     @ObservableState
     struct State: Equatable {
-        var albumList = IdentifiedArrayOf<Album>()
+        var albumList = [Album]()
     }
 
     enum Action: Equatable {
         case fetchAblumList
-        case albumList(IdentifiedArrayOf<Album>)
+        case albumList([Album])
     }
 
     @Dependency(\.albumClient.fetchAlbumList) var fetchAlbumList
@@ -31,7 +31,7 @@ struct AlbumListFeature {
             case .fetchAblumList:
                 return .run { send in
                     let ablumList = await fetchAlbumList()
-                    await send(.albumList(IdentifiedArrayOf(uniqueElements: ablumList)))
+                    await send(.albumList(ablumList))
                 }
             case .albumList(let albumList):
                 state.albumList = albumList
@@ -45,7 +45,6 @@ struct AlbumListView: View {
 
     let store: StoreOf<AlbumListFeature>
 
-
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
@@ -56,20 +55,20 @@ struct AlbumListView: View {
                     ], spacing: 20
                 ) {
                     ForEach(viewStore.albumList) { album in
-                        VStack {
-                            MusicThumbnailView(album.musicList.first?.asset)
-                            Text(album.title) // 제목
-                                .fontWeight(.semibold)
-                            Text(album.artist) // 작가 이름
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                        NavigationLink(
+                            state: AppFeature.Path.State.album(AlbumFeature.State(album: album))
+                        ) {
+                            AlbumCardView(album: album)
                         }
-                        .padding(.horizontal)
                     }
 
                 }
-                .task { viewStore.send(.fetchAblumList) }
+                .task {
+                    guard viewStore.albumList.isEmpty == true else { return }
+                    viewStore.send(.fetchAblumList)
+                }
             }
+            .navigationTitle("앨범리스트")
         }
     }
 }
@@ -79,9 +78,7 @@ struct AlbumListView: View {
         NavigationStack {
             AlbumListView(
                 store: Store(initialState: AlbumListFeature.State())
-                {
-                    AlbumListFeature()
-                }
+                {  AlbumListFeature() }
             )
         }
     }
