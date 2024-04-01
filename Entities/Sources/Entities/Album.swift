@@ -13,4 +13,11 @@ public struct Album: Identifiable, Equatable {
     public let title: String
     public let artist: String
     public let musicList: [Music]
+
+    public init(id: UUID, title: String, artist: String, musicList: [Music]) {
+        self.id = id
+        self.title = title
+        self.artist = artist
+        self.musicList = musicList
+    }
 }
