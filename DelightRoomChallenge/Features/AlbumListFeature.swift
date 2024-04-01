@@ -45,7 +45,6 @@ struct AlbumListView: View {
 
     let store: StoreOf<AlbumListFeature>
 
-
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
@@ -56,20 +55,20 @@ struct AlbumListView: View {
                     ], spacing: 20
                 ) {
                     ForEach(viewStore.albumList) { album in
-                        VStack {
-                            MusicThumbnailView(album.musicList.first?.asset)
-                            Text(album.title) // 제목
-                                .fontWeight(.semibold)
-                            Text(album.artist) // 작가 이름
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                        NavigationLink(
+                            state: AppFeature.Path.State.album(AlbumFeature.State())
+                        ) {
+                            AlbumCardView(album: album)
                         }
-                        .padding(.horizontal)
                     }
 
                 }
-                .task { viewStore.send(.fetchAblumList) }
+                .task {
+                    guard viewStore.albumList.isEmpty == true else { return }
+                    viewStore.send(.fetchAblumList)
+                }
             }
+            .navigationTitle("앨범리스트")
         }
     }
 }

@@ -12,8 +12,14 @@ let package = Package(
             targets: ["Views"]
         )
     ],
+    dependencies: [
+        .package(name: "Entities", path: "../Entities")
+    ],
     targets: [
-        .target(name: "Views"),
+        .target(
+            name: "Views",
+            dependencies: [.product(name: "Entities", package: "Entities")]
+        ),
         .testTarget(
             name: "ViewsTests",
             dependencies: ["Views"]
