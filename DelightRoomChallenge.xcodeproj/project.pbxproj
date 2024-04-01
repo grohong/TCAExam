@@ -17,6 +17,7 @@
 		E46387452BBB08A200A6C72D /* MusicPlayerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387442BBB08A200A6C72D /* MusicPlayerFeature.swift */; };
 		E46387472BBB166C00A6C72D /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387462BBB166C00A6C72D /* AppFeature.swift */; };
 		E46387492BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46387482BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift */; };
+		E463874B2BBB23AF00A6C72D /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E463874A2BBB23AF00A6C72D /* AppFeatureTests.swift */; };
 		E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E4650C2C2BB996B500177256 /* ComposableArchitecture */; };
 		E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */; };
 		E46E00192BB6906F00CDAA80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E00182BB6906F00CDAA80 /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 		E46387442BBB08A200A6C72D /* MusicPlayerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerFeature.swift; sourceTree = "<group>"; };
 		E46387462BBB166C00A6C72D /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		E46387482BBB1C0200A6C72D /* MusicPlayerSheetFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerSheetFeature.swift; sourceTree = "<group>"; };
+		E463874A2BBB23AF00A6C72D /* AppFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeatureTests.swift; sourceTree = "<group>"; };
 		E46E00112BB6906E00CDAA80 /* DelightRoomChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DelightRoomChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelightRoomChallengeApp.swift; sourceTree = "<group>"; };
 		E46E00182BB6906F00CDAA80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			children = (
 				E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */,
 				E4C09F552BBA879500567B2D /* NavigationStackFeatureTests.swift */,
+				E463874A2BBB23AF00A6C72D /* AppFeatureTests.swift */,
 			);
 			path = FeatureTests;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 			files = (
 				E4C09F562BBA879500567B2D /* NavigationStackFeatureTests.swift in Sources */,
 				E4B419FE2BB9E7B3005C716D /* AlbumListFeatureTests.swift in Sources */,
+				E463874B2BBB23AF00A6C72D /* AppFeatureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
