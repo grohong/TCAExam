@@ -17,8 +17,6 @@ struct NavigationStackFeature {
         var path = StackState<Path.State>()
         var albumList = AlbumListFeature.State()
         var musicPlayer = MusicPlayerFeature.State()
-        var playAlbum: Album?
-        var albumIndex: Int?
     }
 
     enum Action: Equatable {
@@ -54,13 +52,6 @@ struct NavigationStackFeature {
 
         Reduce { state, action in
             switch action {
-            case .path(.element(_, action: .album(.delegate(let action)))):
-                switch action {
-                case .playAlbum(let album, let index):
-                    state.playAlbum = album
-                    state.albumIndex = index
-                    return .none
-                }
             case .path:
                 return .none
             case .albumList:

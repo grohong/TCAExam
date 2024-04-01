@@ -15,9 +15,9 @@ struct DelightRoomChallengeApp: App {
             if DebugSettings.isRunningTests {
                 Text("테스트 중입니다")
             } else {
-                NavigationStackView(
-                    store: Store(initialState: NavigationStackFeature.State()) {
-                        NavigationStackFeature()
+                AppFeatureView(
+                    store: Store(initialState: AppFeature.State()) {
+                        AppFeature()
                             ._printChanges()
                     }
                 )
