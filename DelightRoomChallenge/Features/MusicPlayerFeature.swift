@@ -82,7 +82,6 @@ struct MusicPlayerFeature {
 struct MusicPlayerView: View {
 
     let store: StoreOf<MusicPlayerFeature>
-    @State private var soundVolume = 0.0
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -118,8 +117,7 @@ struct MusicPlayerView: View {
                     },
                     period: viewStore.period,
                     isPlaying: viewStore.isPlaying,
-                    music: viewStore.music,
-                    soundVolume: $soundVolume
+                    music: viewStore.music
                 )
             }
         }

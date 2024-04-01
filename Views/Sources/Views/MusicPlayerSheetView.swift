@@ -22,20 +22,17 @@ public struct MusicPlayerSheetView: View {
     private let period: Double
     private let isPlaying: Bool
     private let music: Music?
-    @Binding private var soundVolume: Double
 
     public init(
         action: @escaping (ActionKind) -> Void,
         period: Double,
         isPlaying: Bool,
-        music: Music?,
-        soundVolume: Binding<Double>
+        music: Music?
     ) {
         self.action = action
         self.period = period
         self.isPlaying = isPlaying
         self.music = music
-        _soundVolume = soundVolume
     }
 
     public var body: some View {
@@ -98,8 +95,8 @@ public struct MusicPlayerSheetView: View {
             .font(.largeTitle)
             .padding()
 
-            Slider(value: $soundVolume, in: 0...1, step: 0.01)
-                .accentColor(.blue)
+            SystemVolumeControlView()
+                .frame(height: 80)
                 .padding()
 
             ProgressView(value: period)
@@ -114,8 +111,7 @@ struct MusicPlayerSheetViewPreviews: PreviewProvider {
             action: { _ in },
             period: 0.4,
             isPlaying: true,
-            music: nil,
-            soundVolume: .constant(0.5)
+            music: nil
         )
         .previewLayout(.fixed(width: 375, height: 600))
     }
