@@ -17,4 +17,11 @@ public struct Music: Equatable, Identifiable, Codable {
     public var asset: AVAsset? {
         AVAsset(url: assetURL)
     }
+
+    public init(id: UUID, title: String, artist: String, assetURL: URL) {
+        self.id = id
+        self.title = title
+        self.artist = artist
+        self.assetURL = assetURL
+    }
 }

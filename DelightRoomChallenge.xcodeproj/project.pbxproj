@@ -17,6 +17,7 @@
 		E46E00152BB6906E00CDAA80 /* DelightRoomChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46E00142BB6906E00CDAA80 /* DelightRoomChallengeApp.swift */; };
 		E46E00192BB6906F00CDAA80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E00182BB6906F00CDAA80 /* Assets.xcassets */; };
 		E46E001C2BB6906F00CDAA80 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E46E001B2BB6906F00CDAA80 /* Preview Assets.xcassets */; };
+		E4AD5DE52BBAD27D002E5E73 /* MusicPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = E4AD5DE42BBAD27D002E5E73 /* MusicPlayer */; };
 		E4B419FE2BB9E7B3005C716D /* AlbumListFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B419FD2BB9E7B3005C716D /* AlbumListFeatureTests.swift */; };
 		E4C09F562BBA879500567B2D /* AppFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C09F552BBA879500567B2D /* AppFeatureTests.swift */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E402D3392BB9B36C008EC645 /* Views in Frameworks */,
+				E4AD5DE52BBAD27D002E5E73 /* MusicPlayer in Frameworks */,
 				E4650C2D2BB996B500177256 /* ComposableArchitecture in Frameworks */,
 				E411781E2BB98E5A00160CF1 /* Entities in Frameworks */,
 			);
@@ -175,6 +177,7 @@
 				E411781D2BB98E5A00160CF1 /* Entities */,
 				E4650C2C2BB996B500177256 /* ComposableArchitecture */,
 				E402D3382BB9B36C008EC645 /* Views */,
+				E4AD5DE42BBAD27D002E5E73 /* MusicPlayer */,
 			);
 			productName = DelightRoomChallenge;
 			productReference = E46E00112BB6906E00CDAA80 /* DelightRoomChallenge.app */;
@@ -231,6 +234,7 @@
 				E411781C2BB98E5A00160CF1 /* XCLocalSwiftPackageReference "Entities" */,
 				E4650C2B2BB996B500177256 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				E402D3372BB9B36B008EC645 /* XCLocalSwiftPackageReference "Views" */,
+				E4AD5DE32BBAD27D002E5E73 /* XCLocalSwiftPackageReference "MusicPlayer" */,
 			);
 			productRefGroup = E46E00122BB6906E00CDAA80 /* Products */;
 			projectDirPath = "";
@@ -557,6 +561,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Entities;
 		};
+		E4AD5DE32BBAD27D002E5E73 /* XCLocalSwiftPackageReference "MusicPlayer" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = MusicPlayer;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -583,6 +591,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E4650C2B2BB996B500177256 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		E4AD5DE42BBAD27D002E5E73 /* MusicPlayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MusicPlayer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
