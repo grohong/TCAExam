@@ -112,11 +112,10 @@ final class MusicPlayerFeatureTests: XCTestCase {
 
         store.exhaustivity = .off(showSkippedAssertions: false)
         await store.send(.onTask)
-        let changedPlayingState = PlayingState(isPlaying: false, period: 0.5)
+        let changedPlayingState = PlayingState(isPlaying: false, currentTimeInSeconds: 0.4, durationInSeconds: 0.6)
         await playingStateContinuationManager.yield(playingState: changedPlayingState)
         await store.receive(.playStateChanged(changedPlayingState)) {
-            $0.period = changedPlayingState.period
-            $0.isPlaying = changedPlayingState.isPlaying
+            $0.playingState = changedPlayingState
         }
     }
 }
