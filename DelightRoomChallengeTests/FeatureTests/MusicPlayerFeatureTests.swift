@@ -35,30 +35,6 @@ final class MusicPlayerFeatureTests: XCTestCase {
     }
 
     @MainActor
-    func testPause() async {
-        let store = TestStore(initialState: MusicPlayerFeature.State()) {
-            MusicPlayerFeature()
-        }
-
-        await store.send(.pause)
-        await store.receive(.isPlayingChanged(false)) {
-            $0.isPlaying = false
-        }
-    }
-
-    @MainActor
-    func testPlay() async {
-        let store = TestStore(initialState: MusicPlayerFeature.State(isPlaying: false)) {
-            MusicPlayerFeature()
-        }
-
-        await store.send(.play)
-        await store.receive(.isPlayingChanged(true)) {
-            $0.isPlaying = true
-        }
-    }
-
-    @MainActor
     func testNextPlay() async {
 
         let indexer = MusicIndexer()
@@ -70,7 +46,7 @@ final class MusicPlayerFeatureTests: XCTestCase {
             nextPlay: { await indexer.incrementIndex() },
             prevPlay: { },
             currentMusic: { AsyncStream { _ in } },
-            period: { AsyncStream { _ in } }
+            playingState: { AsyncStream { _ in } }
         )
 
         let store = TestStore(initialState: MusicPlayerFeature.State()) {
@@ -96,7 +72,7 @@ final class MusicPlayerFeatureTests: XCTestCase {
             nextPlay: { },
             prevPlay: { await indexer.decrementIndex() },
             currentMusic: { AsyncStream { _ in } },
-            period: { AsyncStream { _ in } }
+            playingState: { AsyncStream { _ in } }
         )
 
         let store = TestStore(initialState: MusicPlayerFeature.State()) {
@@ -111,8 +87,8 @@ final class MusicPlayerFeatureTests: XCTestCase {
     }
 
     @MainActor
-    func testSycnPeriod() async {
-        let periodContinuation = PeriodContinuationManager()
+    func testSycnPlayingState() async {
+        let playingStateContinuationManager = PlayingStateContinuationManager()
 
         let mockMusicPlayerClient = MusicPlayerClient(
             play: { },
@@ -121,9 +97,9 @@ final class MusicPlayerFeatureTests: XCTestCase {
             nextPlay: { },
             prevPlay: { },
             currentMusic: { AsyncStream { continuation in } },
-            period: {
+            playingState: {
                 AsyncStream { continuation in
-                    Task { await periodContinuation.configure(continuation) }
+                    Task { await playingStateContinuationManager.configure(continuation) }
                 }
             }
         )
@@ -136,22 +112,24 @@ final class MusicPlayerFeatureTests: XCTestCase {
 
         store.exhaustivity = .off(showSkippedAssertions: false)
         await store.send(.onTask)
-        await periodContinuation.yield(period: 0.5)
-        await store.receive(.periodChanged(0.5)) {
-            $0.period = 0.5
+        let changedPlayingState = PlayingState(isPlaying: false, period: 0.5)
+        await playingStateContinuationManager.yield(playingState: changedPlayingState)
+        await store.receive(.playStateChanged(changedPlayingState)) {
+            $0.period = changedPlayingState.period
+            $0.isPlaying = changedPlayingState.isPlaying
         }
     }
 }
 
-actor PeriodContinuationManager {
+actor PlayingStateContinuationManager {
 
-    var continuation: AsyncStream<Double>.Continuation?
+    var continuation: AsyncStream<PlayingState>.Continuation?
 
-    func yield(period: Double) {
-        continuation?.yield(period)
+    func yield(playingState: PlayingState) {
+        continuation?.yield(playingState)
     }
 
-    func configure(_ continuation: AsyncStream<Double>.Continuation) {
+    func configure(_ continuation: AsyncStream<PlayingState>.Continuation) {
         self.continuation = continuation
     }
 }
