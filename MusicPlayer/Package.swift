@@ -13,12 +13,16 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: "Entities", path: "../Entities")
+        .package(name: "Entities", path: "../Entities"),
+        .package(name: "Shared", path: "../Shared")
     ],
     targets: [
         .target(
             name: "MusicPlayer",
-            dependencies: [.product(name: "Entities", package: "Entities")]
+            dependencies: [
+                .product(name: "Entities", package: "Entities"),
+                .product(name: "Shared", package: "Shared")
+            ]
         ),
         .testTarget(
             name: "MusicPlayerTests",
