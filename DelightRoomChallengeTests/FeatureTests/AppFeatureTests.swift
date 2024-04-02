@@ -82,7 +82,7 @@ final class AppFeatureTests: XCTestCase {
                     Task { await currentMusicContinuation.configure(continuation) }
                 }
             },
-            period: { AsyncStream { continuation in } }
+            playingState: { AsyncStream { _ in } }
         )
 
         let store = TestStore(

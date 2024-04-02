@@ -17,8 +17,11 @@ struct MusicPlayerFeature {
     struct State: Equatable {
         var isSheetPresented: Bool = false
         var music: Music?
-        var isPlaying = true
-        var period: Double = .zero
+        var playingState = PlayingState(
+            isPlaying: true,
+            currentTimeInSeconds: .zero,
+            durationInSeconds: .zero
+        )
     }
 
     enum Action: Equatable {
@@ -28,8 +31,7 @@ struct MusicPlayerFeature {
         case pause
         case nextPlay
         case prevPlay
-        case isPlayingChanged(Bool)
-        case periodChanged(Double)
+        case playStateChanged(PlayingState)
         case onTask
     }
 
@@ -45,24 +47,15 @@ struct MusicPlayerFeature {
                 state.isSheetPresented = false
                 return .none
             case .play:
-                return .run { send in
-                    await musicPlayerClient.play()
-                    await send(.isPlayingChanged(true))
-                }
+                return .run { _ in await musicPlayerClient.play() }
             case .pause:
-                return .run { send in
-                    await musicPlayerClient.pause()
-                    await send(.isPlayingChanged(false))
-                }
+                return .run { _ in await musicPlayerClient.pause() }
             case .nextPlay:
                 return .run { _ in await musicPlayerClient.nextPlay() }
             case .prevPlay:
                 return .run { _ in await musicPlayerClient.prevPlay() }
-            case .isPlayingChanged(let isPlaying):
-                state.isPlaying = isPlaying
-                return .none
-            case .periodChanged(let period):
-                state.period = period
+            case .playStateChanged(let playingState):
+                state.playingState = playingState
                 return .none
             case .onTask:
                 return .run { send in
@@ -73,8 +66,8 @@ struct MusicPlayerFeature {
     }
 
     private func onTask(send: Send<Action>) async {
-        for await music in self.musicPlayerClient.period() {
-            await send(.periodChanged(music))
+        for await playingState in self.musicPlayerClient.playingState() {
+            await send(.playStateChanged(playingState))
         }
     }
 }
@@ -89,8 +82,7 @@ struct MusicPlayerView: View {
                 playAction: { viewStore.send(.play) },
                 pauseAction: { viewStore.send(.pause) },
                 tapAction: { viewStore.send(.showSheet) },
-                period: viewStore.period,
-                isPlaying: viewStore.isPlaying,
+                playingState: viewStore.playingState,
                 music: viewStore.music
             )
             .task { await store.send(.onTask).finish() }
@@ -115,8 +107,7 @@ struct MusicPlayerView: View {
                             viewStore.send(.hideSheet)
                         }
                     },
-                    period: viewStore.period,
-                    isPlaying: viewStore.isPlaying,
+                    playingState: viewStore.playingState,
                     music: viewStore.music
                 )
             }
