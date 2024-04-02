@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import MediaPlayer
 import Combine
 import Entities
 import Shared
@@ -161,51 +162,5 @@ extension AVPlayer: PlayerProtocol {
 
     func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using: @escaping (CMTime) -> Void) -> Any {
         addPeriodicTimeObserver(forInterval: interval, queue: queue, using: using)
-    }
-}
-
-import MediaPlayer
-
-extension MusicPlayerManager {
-
-    private func configureMPNowPlayingInfoCenter(_ item: AVPlayerItem, music: Music) async {
-        var nowPlayingInfo = [String: Any]()
-        nowPlayingInfo[MPMediaItemPropertyTitle] = music.title
-        nowPlayingInfo[MPMediaItemPropertyArtist] = music.artist
-
-        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = item.duration.seconds.isFinite
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = Double.zero
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = Float.zero
-
-        if let artworkImage = await item.asset.thumbnail {
-            let artwork = MPMediaItemArtwork(boundsSize: artworkImage.size) { size in return artworkImage }
-            nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
-        }
-
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-    }
-
-    private func configureRemoteCommandCenter() async {
-        let commandCenter = MPRemoteCommandCenter.shared()
-        commandCenter.playCommand.addTarget { [weak self] event in
-            guard let self = self else { return .commandFailed }
-            Task { await self.play() }
-            return .success
-        }
-        commandCenter.pauseCommand.addTarget { [weak self] event in
-            guard let self = self else { return .commandFailed }
-            Task { await self.pause() }
-            return .success
-        }
-        commandCenter.nextTrackCommand.addTarget { [weak self] event in
-            guard let self = self else { return .commandFailed }
-            Task { await self.nextPlay() }
-            return .success
-        }
-        commandCenter.previousTrackCommand.addTarget { [weak self] event in
-            guard let self = self else { return .commandFailed }
-            Task { await self.prevPlay() }
-            return .success
-        }
     }
 }
