@@ -23,18 +23,24 @@ public struct PlayerControlView: View {
     public var body: some View {
         HStack(spacing: 20) {
             Button(action: playAction) {
-                Image(systemName: "play.fill")
-                    .foregroundColor(.blue)
-                    .imageScale(.large)
+                ZStack {
+                    Rectangle().fill(Color.clear)
+                    Image(systemName: "play.fill")
+                        .foregroundColor(.blue)
+                        .imageScale(.large)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.blue.opacity(0.2))
             .cornerRadius(10)
 
             Button(action: shuffleAction) {
-                Image(systemName: "shuffle")
-                    .foregroundColor(.blue)
-                    .imageScale(.large)
+                ZStack {
+                    Rectangle().fill(Color.clear)
+                    Image(systemName: "shuffle")
+                        .foregroundColor(.blue)
+                        .imageScale(.large)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.blue.opacity(0.2))
