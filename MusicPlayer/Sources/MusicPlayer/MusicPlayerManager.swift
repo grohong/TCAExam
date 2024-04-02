@@ -85,6 +85,11 @@ public actor MusicPlayerManager {
         await playCurrentIndexMusic()
     }
 
+    public func seekToPosition(seconds: TimeInterval) {
+        let cmTime = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        player.seek(to: cmTime) { _ in }
+    }
+
     private func playCurrentIndexMusic() async {
         let music = musicList[currentPlayIndex]
         let item = AVPlayerItem(url: music.assetURL)
@@ -151,6 +156,7 @@ protocol PlayerProtocol {
     func changeCurrentItem(with item: AVPlayerItem)
     func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using: @escaping (CMTime) -> Void) -> Any
     func removeTimeObserver(_ observer: Any)
+    func seek(to time: CMTime, completionHandler: @escaping (Bool) -> Void)
     var currentItem: AVPlayerItem? { get }
 }
 

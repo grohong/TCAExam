@@ -49,5 +49,11 @@ extension MusicPlayerManager {
             Task { await self.prevPlay() }
             return .success
         }
+        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
+            guard let self = self, let playbackPositionEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
+            let newPosition = playbackPositionEvent.positionTime
+            self.seekToPosition(seconds: newPosition)
+            return .success
+        }
     }
 }
