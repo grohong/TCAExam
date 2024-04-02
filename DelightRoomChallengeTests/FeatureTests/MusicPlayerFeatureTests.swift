@@ -59,6 +59,58 @@ final class MusicPlayerFeatureTests: XCTestCase {
     }
 
     @MainActor
+    func testNextPlay() async {
+
+        let indexer = MusicIndexer()
+
+        let mockMusicPlayerClient = MusicPlayerClient(
+            play: { },
+            pause: { },
+            startAlbum: { _, _ in },
+            nextPlay: { await indexer.incrementIndex() },
+            prevPlay: { },
+            currentMusic: { AsyncStream { _ in } },
+            period: { AsyncStream { _ in } }
+        )
+
+        let store = TestStore(initialState: MusicPlayerFeature.State()) {
+            MusicPlayerFeature()
+        } withDependencies: {
+            $0.musicPlayerClient = mockMusicPlayerClient
+        }
+
+        await store.send(.nextPlay)
+        let nextPlayIndex = await indexer.index
+        XCTAssertEqual(nextPlayIndex, 1)
+    }
+
+    @MainActor
+    func testPrevPlay() async {
+
+        let indexer = MusicIndexer()
+
+        let mockMusicPlayerClient = MusicPlayerClient(
+            play: { },
+            pause: { },
+            startAlbum: { _, _ in },
+            nextPlay: { },
+            prevPlay: { await indexer.decrementIndex() },
+            currentMusic: { AsyncStream { _ in } },
+            period: { AsyncStream { _ in } }
+        )
+
+        let store = TestStore(initialState: MusicPlayerFeature.State()) {
+            MusicPlayerFeature()
+        } withDependencies: {
+            $0.musicPlayerClient = mockMusicPlayerClient
+        }
+
+        await store.send(.prevPlay)
+        let prevPlayIndex = await indexer.index
+        XCTAssertEqual(prevPlayIndex, -1)
+    }
+
+    @MainActor
     func testSycnPeriod() async {
         let periodContinuation = PeriodContinuationManager()
 
@@ -101,5 +153,18 @@ actor PeriodContinuationManager {
 
     func configure(_ continuation: AsyncStream<Double>.Continuation) {
         self.continuation = continuation
+    }
+}
+
+actor MusicIndexer {
+
+    var index: Int = .zero
+
+    func incrementIndex() {
+        index += 1
+    }
+
+    func decrementIndex() {
+        index -= 1
     }
 }
