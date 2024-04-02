@@ -96,9 +96,22 @@ public struct MusicPlayerSheetView: View {
                 .frame(height: 80)
                 .padding()
 
+            HStack {
+                Text(formatTime(time: playingState.currentTimeInSeconds))
+                Spacer()
+                Text("-\(formatTime(time:playingState.durationInSeconds - playingState.currentTimeInSeconds))")
+            }
+            .padding(.horizontal)
+
             ProgressView(value: playingState.period)
                 .progressViewStyle(LinearProgressViewStyle())
         }
+    }
+
+    private func formatTime(time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%d:%02d", minutes, seconds)
     }
 }
 

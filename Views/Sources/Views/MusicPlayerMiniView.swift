@@ -81,8 +81,8 @@ struct MusicPlayerMiniViewPreviews: PreviewProvider {
             tapAction: { },
             playingState: .init(
                 isPlaying: true, 
-                currentTimeInSeconds: .zero,
-                durationInSeconds: .zero
+                currentTimeInSeconds: 3.0,
+                durationInSeconds: 6.0
             ),
             music: nil
         )
