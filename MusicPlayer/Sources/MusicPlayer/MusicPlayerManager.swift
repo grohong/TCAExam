@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import Combine
 import Entities
 import Shared
 
@@ -23,6 +24,7 @@ public actor MusicPlayerManager {
     private var currentMusicContinuation: AsyncStream<Music?>.Continuation?
     private var playingStateContinuation: AsyncStream<PlayingState>.Continuation?
     private var timeObserverToken: Any?
+    private var cancellables = Set<AnyCancellable>()
 
     init(player: PlayerProtocol = AVPlayer()) {
         self.player = player
@@ -94,17 +96,13 @@ public actor MusicPlayerManager {
 
     private func configurePlayerItemDidReachEndNotification(_ item: AVPlayerItem) {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(playerItemDidReachEnd(notification:)),
-            name: .AVPlayerItemDidPlayToEndTime,
-            object: item
-        )
-    }
-
-    @MainActor
-    @objc private func playerItemDidReachEnd(notification: Notification) async {
-        await nextPlay()
+        NotificationCenter.default
+            .publisher(for: .AVPlayerItemDidPlayToEndTime, object: item)
+            .sink() { [weak self] _ in
+                guard let self else { return }
+                Task { await self.nextPlay() }
+            }
+            .store(in: &cancellables)
     }
 
     private func startTrackingPeriod() {
