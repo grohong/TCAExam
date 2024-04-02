@@ -26,15 +26,21 @@ public actor MusicPlayerManager {
     private var playingStateContinuation: AsyncStream<PlayingState>.Continuation?
     private var timeObserverToken: Any?
     private var cancellables = Set<AnyCancellable>()
+    private var isSetActive = false
 
     init(player: PlayerProtocol = AVPlayer()) {
         self.player = player
         Task { await configureRemoteCommandCenter() }
+    }
+
+    private func setActive() {
+        guard isSetActive == false else { return }
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
+            isSetActive = true
         } catch {
-            print("Failed to set up audio session: \(error)")
+            isSetActive = false
         }
     }
 
@@ -91,6 +97,7 @@ public actor MusicPlayerManager {
     }
 
     private func playCurrentIndexMusic() async {
+        setActive()
         stopTrackingPeriod()
         let music = musicList[currentPlayIndex]
         let item = AVPlayerItem(url: music.assetURL)
