@@ -28,8 +28,7 @@ struct MusicPlayerFeature {
         case pause
         case nextPlay
         case prevPlay
-        case isPlayingChanged(Bool)
-        case periodChanged(Double)
+        case playStateChanged(PlayingState)
         case onTask
     }
 
@@ -45,24 +44,16 @@ struct MusicPlayerFeature {
                 state.isSheetPresented = false
                 return .none
             case .play:
-                return .run { send in
-                    await musicPlayerClient.play()
-                    await send(.isPlayingChanged(true))
-                }
+                return .run { _ in await musicPlayerClient.play() }
             case .pause:
-                return .run { send in
-                    await musicPlayerClient.pause()
-                    await send(.isPlayingChanged(false))
-                }
+                return .run { _ in await musicPlayerClient.pause() }
             case .nextPlay:
                 return .run { _ in await musicPlayerClient.nextPlay() }
             case .prevPlay:
                 return .run { _ in await musicPlayerClient.prevPlay() }
-            case .isPlayingChanged(let isPlaying):
-                state.isPlaying = isPlaying
-                return .none
-            case .periodChanged(let period):
-                state.period = period
+            case .playStateChanged(let playingState):
+                state.isPlaying = playingState.isPlaying
+                state.period = playingState.period
                 return .none
             case .onTask:
                 return .run { send in
@@ -73,8 +64,8 @@ struct MusicPlayerFeature {
     }
 
     private func onTask(send: Send<Action>) async {
-        for await music in self.musicPlayerClient.period() {
-            await send(.periodChanged(music))
+        for await playingState in self.musicPlayerClient.playingState() {
+            await send(.playStateChanged(playingState))
         }
     }
 }

@@ -18,7 +18,7 @@ struct MusicPlayerClient {
     var nextPlay: @Sendable () async -> Void
     var prevPlay: @Sendable () async -> Void
     var currentMusic: @Sendable () -> AsyncStream<Music?>
-    var period: @Sendable () -> AsyncStream<Double>
+    var playingState: @Sendable () -> AsyncStream<PlayingState>
 }
 
 extension MusicPlayerClient: DependencyKey {
@@ -35,10 +35,10 @@ extension MusicPlayerClient: DependencyKey {
                 Task { await musicPlayerManager.configureCurrentMusicContinuation(continuation) }
             }
         },
-        period: {
+        playingState: {
             AsyncStream { continuation in
                 let musicPlayerManager = MusicPlayerManager.shared
-                Task { await musicPlayerManager.configurePeriodContinuation(continuation) }
+                Task { await musicPlayerManager.configurePlayingStateContinuation(continuation) }
             }
         }
     )
@@ -50,7 +50,7 @@ extension MusicPlayerClient: DependencyKey {
         nextPlay: { },
         prevPlay: { },
         currentMusic: { AsyncStream { continuation in } },
-        period: { AsyncStream { continuation in } }
+        playingState: { AsyncStream { continuation in } }
     )
 }
 

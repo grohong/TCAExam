@@ -103,5 +103,6 @@ class MockPlayer: PlayerProtocol {
         currentItem = item
     }
 
-    func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using block: @escaping (CMTime) -> Void) { }
+    func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using block: @escaping (CMTime) -> Void) -> Any { return Any.self }
+    func removeTimeObserver(_ observer: Any) { }
 }

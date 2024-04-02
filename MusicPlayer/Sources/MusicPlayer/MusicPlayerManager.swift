@@ -15,14 +15,18 @@ public actor MusicPlayerManager {
 
     private(set) var musicList = [Music]()
     private(set) var currentPlayIndex: Int = .zero
+
     private let player: PlayerProtocol
+    private var currentPeriod: Double = .zero
+    private var isPlaying = false
+
     private var currentMusicContinuation: AsyncStream<Music?>.Continuation?
-    private var periodContinuation: AsyncStream<Double>.Continuation?
+    private var playingStateContinuation: AsyncStream<PlayingState>.Continuation?
     private var timeObserverToken: Any?
 
     init(player: PlayerProtocol = AVPlayer()) {
         self.player = player
-        configureRemoteCommandCenter()
+        Task { await configureRemoteCommandCenter() }
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -35,8 +39,8 @@ public actor MusicPlayerManager {
         self.currentMusicContinuation = continuation
     }
 
-    public func configurePeriodContinuation(_ continuation: AsyncStream<Double>.Continuation) async {
-        self.periodContinuation = continuation
+    public func configurePlayingStateContinuation(_ continuation: AsyncStream<PlayingState>.Continuation) async {
+        self.playingStateContinuation = continuation
     }
 
     public func startPlay(musicList: [Music], index: Int) async {
@@ -47,10 +51,16 @@ public actor MusicPlayerManager {
 
     public func play() async {
         player.play()
+        isPlaying = true
+        playingStateContinuation?.yield(.init(isPlaying: true, period: currentPeriod))
+        startTrackingPeriod()
     }
 
     public func pause() async {
         player.pause()
+        isPlaying = false
+        playingStateContinuation?.yield(.init(isPlaying: false, period: currentPeriod))
+        stopTrackingPeriod()
     }
 
     public func nextPlay() async {
@@ -78,9 +88,8 @@ public actor MusicPlayerManager {
         player.changeCurrentItem(with: item)
         currentMusicContinuation?.yield(musicList[currentPlayIndex])
         await play()
-        configurePlayerItemDidReachEndNotification(item)
-        startTrackingPeriod()
         await configureMPNowPlayingInfoCenter(item, music: music)
+        configurePlayerItemDidReachEndNotification(item)
     }
 
     private func configurePlayerItemDidReachEndNotification(_ item: AVPlayerItem) {
@@ -104,21 +113,36 @@ public actor MusicPlayerManager {
             guard let self = self, let playerItem = self.player.currentItem else { return }
             let currentTimeInSeconds = CMTimeGetSeconds(time)
             let durationInSeconds = CMTimeGetSeconds(playerItem.duration)
-
-            var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
-            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTimeInSeconds
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = durationInSeconds
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-
             if durationInSeconds.isFinite {
-                let progress = currentTimeInSeconds / durationInSeconds
-                Task { await self.updatePeriod(progress) }
+                Task {
+                    await self.update(
+                        currentTimeInSeconds: currentTimeInSeconds,
+                        durationInSeconds: durationInSeconds
+                    )
+                }
             }
         }
     }
 
-    private func updatePeriod(_ progress: Double) {
-        self.periodContinuation?.yield(progress)
+    private func stopTrackingPeriod() {
+        if let timeObserverToken = timeObserverToken {
+            player.removeTimeObserver(timeObserverToken)
+            self.timeObserverToken = nil
+        }
+    }
+
+    private func update(
+        currentTimeInSeconds: Double,
+        durationInSeconds: Double
+    ) async {
+        let period = currentTimeInSeconds / durationInSeconds
+        self.currentPeriod = period
+        playingStateContinuation?.yield(.init(isPlaying: isPlaying, period: period))
+
+        var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTimeInSeconds
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = durationInSeconds
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 }
 
@@ -126,9 +150,9 @@ protocol PlayerProtocol {
     func play()
     func pause()
     func changeCurrentItem(with item: AVPlayerItem)
-    func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using: @escaping (CMTime) -> Void)
+    func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using: @escaping (CMTime) -> Void) -> Any
+    func removeTimeObserver(_ observer: Any)
     var currentItem: AVPlayerItem? { get }
-    var rate: Float { get }
 }
 
 extension AVPlayer: PlayerProtocol {
@@ -137,7 +161,7 @@ extension AVPlayer: PlayerProtocol {
         replaceCurrentItem(with: item)
     }
 
-    func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using: @escaping (CMTime) -> Void) {
+    func addPeriodTimeObserver(forInterval interval: CMTime, queue: DispatchQueue, using: @escaping (CMTime) -> Void) -> Any {
         addPeriodicTimeObserver(forInterval: interval, queue: queue, using: using)
     }
 }
@@ -150,9 +174,10 @@ extension MusicPlayerManager {
         var nowPlayingInfo = [String: Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = music.title
         nowPlayingInfo[MPMediaItemPropertyArtist] = music.artist
+
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = item.duration.seconds.isFinite
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = Double.zero
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = Float.zero
 
         if let artworkImage = await item.asset.thumbnail {
             let artwork = MPMediaItemArtwork(boundsSize: artworkImage.size) { size in return artworkImage }
@@ -162,14 +187,26 @@ extension MusicPlayerManager {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 
-    private func configureRemoteCommandCenter() {
+    private func configureRemoteCommandCenter() async {
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.playCommand.addTarget { [weak self] event in
-            Task { await self?.play() }
+            guard let self = self else { return .commandFailed }
+            Task { await self.play() }
             return .success
         }
         commandCenter.pauseCommand.addTarget { [weak self] event in
-            Task { await self?.pause() }
+            guard let self = self else { return .commandFailed }
+            Task { await self.pause() }
+            return .success
+        }
+        commandCenter.nextTrackCommand.addTarget { [weak self] event in
+            guard let self = self else { return .commandFailed }
+            Task { await self.nextPlay() }
+            return .success
+        }
+        commandCenter.previousTrackCommand.addTarget { [weak self] event in
+            guard let self = self else { return .commandFailed }
+            Task { await self.prevPlay() }
             return .success
         }
     }
