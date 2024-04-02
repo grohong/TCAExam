@@ -91,6 +91,7 @@ public actor MusicPlayerManager {
     }
 
     private func playCurrentIndexMusic() async {
+        stopTrackingPeriod()
         let music = musicList[currentPlayIndex]
         let item = AVPlayerItem(url: music.assetURL)
         player.changeCurrentItem(with: item)
@@ -104,6 +105,7 @@ public actor MusicPlayerManager {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: nil)
         NotificationCenter.default
             .publisher(for: .AVPlayerItemDidPlayToEndTime, object: item)
+            .first()
             .sink() { [weak self] _ in
                 guard let self else { return }
                 Task { await self.nextPlay() }
