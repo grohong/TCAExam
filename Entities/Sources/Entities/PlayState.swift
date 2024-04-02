@@ -10,10 +10,18 @@ import Foundation
 public struct PlayingState: Equatable {
 
     public let isPlaying: Bool
-    public let period: Double
+    public let currentTimeInSeconds: Float64
+    public let durationInSeconds: Float64
 
-    public init(isPlaying: Bool, period: Double) {
+    public var period: Double { currentTimeInSeconds / durationInSeconds }
+
+    public init(
+        isPlaying: Bool,
+        currentTimeInSeconds: Float64,
+        durationInSeconds: Float64
+    ) {
         self.isPlaying = isPlaying
-        self.period = period
+        self.currentTimeInSeconds = currentTimeInSeconds
+        self.durationInSeconds = durationInSeconds
     }
 }

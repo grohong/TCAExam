@@ -19,7 +19,9 @@ public actor MusicPlayerManager {
     private(set) var currentPlayIndex: Int = .zero
 
     private let player: PlayerProtocol
-    private var currentPeriod: Double = .zero
+//    private var currentPeriod: Double { currentTimeInSeconds / durationInSeconds }
+    private var currentTimeInSeconds: Float64 = .zero
+    private var durationInSeconds: Float64 = .zero
     private var isPlaying = false
 
     private var currentMusicContinuation: AsyncStream<Music?>.Continuation?
@@ -61,14 +63,26 @@ public actor MusicPlayerManager {
     public func play() async {
         player.play()
         isPlaying = true
-        playingStateContinuation?.yield(.init(isPlaying: true, period: currentPeriod))
+        playingStateContinuation?.yield(
+            .init(
+                isPlaying: true, 
+                currentTimeInSeconds: currentTimeInSeconds,
+                durationInSeconds: durationInSeconds
+            )
+        )
         startTrackingPeriod()
     }
 
     public func pause() async {
         player.pause()
         isPlaying = false
-        playingStateContinuation?.yield(.init(isPlaying: false, period: currentPeriod))
+        playingStateContinuation?.yield(
+            .init(
+                isPlaying: false,
+                currentTimeInSeconds: currentTimeInSeconds,
+                durationInSeconds: durationInSeconds
+            )
+        )
         stopTrackingPeriod()
     }
 
@@ -121,7 +135,7 @@ public actor MusicPlayerManager {
     }
 
     private func startTrackingPeriod() {
-        let interval = CMTime(seconds: 1, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         timeObserverToken = player.addPeriodTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] time in
             guard let self = self, let playerItem = self.player.currentItem else { return }
             let currentTimeInSeconds = CMTimeGetSeconds(time)
@@ -145,12 +159,18 @@ public actor MusicPlayerManager {
     }
 
     private func update(
-        currentTimeInSeconds: Double,
-        durationInSeconds: Double
+        currentTimeInSeconds: Float64,
+        durationInSeconds: Float64
     ) async {
-        let period = currentTimeInSeconds / durationInSeconds
-        self.currentPeriod = period
-        playingStateContinuation?.yield(.init(isPlaying: isPlaying, period: period))
+        self.currentTimeInSeconds = currentTimeInSeconds
+        self.durationInSeconds = durationInSeconds
+        playingStateContinuation?.yield(
+            .init(
+                isPlaying: isPlaying,
+                currentTimeInSeconds: currentTimeInSeconds,
+                durationInSeconds: durationInSeconds
+            )
+        )
 
         var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTimeInSeconds

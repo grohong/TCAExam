@@ -17,8 +17,11 @@ struct MusicPlayerFeature {
     struct State: Equatable {
         var isSheetPresented: Bool = false
         var music: Music?
-        var isPlaying = true
-        var period: Double = .zero
+        var playingState = PlayingState(
+            isPlaying: true,
+            currentTimeInSeconds: .zero,
+            durationInSeconds: .zero
+        )
     }
 
     enum Action: Equatable {
@@ -52,8 +55,7 @@ struct MusicPlayerFeature {
             case .prevPlay:
                 return .run { _ in await musicPlayerClient.prevPlay() }
             case .playStateChanged(let playingState):
-                state.isPlaying = playingState.isPlaying
-                state.period = playingState.period
+                state.playingState = playingState
                 return .none
             case .onTask:
                 return .run { send in
@@ -80,8 +82,7 @@ struct MusicPlayerView: View {
                 playAction: { viewStore.send(.play) },
                 pauseAction: { viewStore.send(.pause) },
                 tapAction: { viewStore.send(.showSheet) },
-                period: viewStore.period,
-                isPlaying: viewStore.isPlaying,
+                playingState: viewStore.playingState,
                 music: viewStore.music
             )
             .task { await store.send(.onTask).finish() }
@@ -106,8 +107,7 @@ struct MusicPlayerView: View {
                             viewStore.send(.hideSheet)
                         }
                     },
-                    period: viewStore.period,
-                    isPlaying: viewStore.isPlaying,
+                    playingState: viewStore.playingState,
                     music: viewStore.music
                 )
             }

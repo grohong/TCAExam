@@ -14,40 +14,37 @@ public struct MusicPlayerMiniView: View {
     private var pauseAction: () -> Void
     private var tapAction: () -> Void
 
-    private let period: Double
-    private let isPlaying: Bool
+    private let playingState: PlayingState
     private let music: Music?
 
     public init(
         playAction: @escaping () -> Void,
         pauseAction: @escaping () -> Void,
         tapAction: @escaping () -> Void,
-        period: Double,
-        isPlaying: Bool,
+        playingState: PlayingState,
         music: Music?
     ) {
         self.playAction = playAction
         self.pauseAction = pauseAction
         self.tapAction = tapAction
-        self.period = period
-        self.isPlaying = isPlaying
+        self.playingState = playingState
         self.music = music
     }
 
     public var body: some View {
         VStack {
-            ProgressView(value: period)
+            ProgressView(value: playingState.period)
                 .progressViewStyle(LinearProgressViewStyle())
 
             HStack {
                 Button(action: {
-                    if isPlaying {
+                    if playingState.isPlaying {
                         pauseAction()
                     } else {
                         playAction()
                     }
                 }) {
-                    Image(systemName: isPlaying ? "pause.circle" : "play.circle")
+                    Image(systemName: playingState.isPlaying ? "pause.circle" : "play.circle")
                         .resizable()
                         .frame(width: 30, height: 30)
                 }
@@ -82,8 +79,11 @@ struct MusicPlayerMiniViewPreviews: PreviewProvider {
             playAction: { },
             pauseAction: { },
             tapAction: { },
-            period: 0.4,
-            isPlaying: true,
+            playingState: .init(
+                isPlaying: true, 
+                currentTimeInSeconds: .zero,
+                durationInSeconds: .zero
+            ),
             music: nil
         )
         .previewLayout(.fixed(width: 375, height: 70))

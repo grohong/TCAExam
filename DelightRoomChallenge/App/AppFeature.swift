@@ -46,7 +46,6 @@ struct AppFeature {
                 if state.musicPlayer != nil {
                     if let music {
                         state.musicPlayer?.music = music
-                        state.musicPlayer?.isPlaying = true
                     } else {
                         state.musicPlayer = nil
                     }

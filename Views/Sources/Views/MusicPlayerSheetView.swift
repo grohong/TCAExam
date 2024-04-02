@@ -19,19 +19,16 @@ public struct MusicPlayerSheetView: View {
     }
 
     private var action: (ActionKind) -> Void
-    private let period: Double
-    private let isPlaying: Bool
+    private let playingState: PlayingState
     private let music: Music?
 
     public init(
         action: @escaping (ActionKind) -> Void,
-        period: Double,
-        isPlaying: Bool,
+        playingState: PlayingState,
         music: Music?
     ) {
         self.action = action
-        self.period = period
-        self.isPlaying = isPlaying
+        self.playingState = playingState
         self.music = music
     }
 
@@ -79,13 +76,13 @@ public struct MusicPlayerSheetView: View {
                 }) { Image(systemName: "backward.fill") }
 
                 Button(action: {
-                    if isPlaying {
+                    if playingState.isPlaying {
                         action(.pause)
                     } else {
                         action(.play)
                     }
                 }) {
-                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                    Image(systemName: playingState.isPlaying ? "pause.fill" : "play.fill")
                 }
 
                 Button(action: {
@@ -99,7 +96,7 @@ public struct MusicPlayerSheetView: View {
                 .frame(height: 80)
                 .padding()
 
-            ProgressView(value: period)
+            ProgressView(value: playingState.period)
                 .progressViewStyle(LinearProgressViewStyle())
         }
     }
@@ -109,8 +106,11 @@ struct MusicPlayerSheetViewPreviews: PreviewProvider {
     static var previews: some View {
         MusicPlayerSheetView(
             action: { _ in },
-            period: 0.4,
-            isPlaying: true,
+            playingState: .init(
+                isPlaying: true,
+                currentTimeInSeconds: 0.4,
+                durationInSeconds: 1.0
+            ),
             music: nil
         )
         .previewLayout(.fixed(width: 375, height: 600))
