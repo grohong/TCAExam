@@ -19,7 +19,6 @@ public actor MusicPlayerManager {
     private(set) var currentPlayIndex: Int = .zero
 
     private let player: PlayerProtocol
-//    private var currentPeriod: Double { currentTimeInSeconds / durationInSeconds }
     private var currentTimeInSeconds: Float64 = .zero
     private var durationInSeconds: Float64 = .zero
     private var isPlaying = false
