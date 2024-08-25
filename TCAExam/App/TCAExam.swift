@@ -1,6 +1,6 @@
 //
-//  DelightRoomChallengeApp.swift
-//  DelightRoomChallenge
+//  TCAExamApp.swift
+//  TCAExam
 //
 //  Created by Hong Seong Ho on 3/29/24.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @main
-struct DelightRoomChallengeApp: App {
+struct TCAExamApp: App {
     var body: some Scene {
         WindowGroup {
             if DebugSettings.isRunningTests {

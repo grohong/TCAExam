@@ -1,12 +1,12 @@
 //
 //  MusicPlayerFeatureTests.swift
-//  DelightRoomChallengeTests
+//  TCAExamTests
 //
 //  Created by Hong Seong Ho on 4/2/24.
 //
 
 import XCTest
-@testable import DelightRoomChallenge
+@testable import TCAExam
 import ComposableArchitecture
 import Entities
 
