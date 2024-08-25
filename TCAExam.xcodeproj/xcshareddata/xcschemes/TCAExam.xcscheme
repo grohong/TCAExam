@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1530"
+   LastUpgradeVersion = "1540"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E46E00102BB6906E00CDAA80"
-               BuildableName = "DelightRoomChallenge.app"
-               BlueprintName = "DelightRoomChallenge"
-               ReferencedContainer = "container:DelightRoomChallenge.xcodeproj">
+               BlueprintIdentifier = "76477D0F2C7AF0EA0046B0F9"
+               BuildableName = "TCAExam.app"
+               BlueprintName = "TCAExam"
+               ReferencedContainer = "container:TCAExam.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,10 +35,10 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E46E00202BB6906F00CDAA80"
-               BuildableName = "DelightRoomChallengeTests.xctest"
-               BlueprintName = "DelightRoomChallengeTests"
-               ReferencedContainer = "container:DelightRoomChallenge.xcodeproj">
+               BlueprintIdentifier = "76477D1E2C7AF0EC0046B0F9"
+               BuildableName = "TCAExamTests.xctest"
+               BlueprintName = "TCAExamTests"
+               ReferencedContainer = "container:TCAExam.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,10 +57,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E46E00102BB6906E00CDAA80"
-            BuildableName = "DelightRoomChallenge.app"
-            BlueprintName = "DelightRoomChallenge"
-            ReferencedContainer = "container:DelightRoomChallenge.xcodeproj">
+            BlueprintIdentifier = "76477D0F2C7AF0EA0046B0F9"
+            BuildableName = "TCAExam.app"
+            BlueprintName = "TCAExam"
+            ReferencedContainer = "container:TCAExam.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E46E00102BB6906E00CDAA80"
-            BuildableName = "DelightRoomChallenge.app"
-            BlueprintName = "DelightRoomChallenge"
-            ReferencedContainer = "container:DelightRoomChallenge.xcodeproj">
+            BlueprintIdentifier = "76477D0F2C7AF0EA0046B0F9"
+            BuildableName = "TCAExam.app"
+            BlueprintName = "TCAExam"
+            ReferencedContainer = "container:TCAExam.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
