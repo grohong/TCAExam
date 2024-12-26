@@ -28,7 +28,10 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .External.composableArchitecture
+                .External.composableArchitecture,
+                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities,
+                .Project.TCAExamFoundation.TCAExamShared.tcaExamShared,
+                .Project.TCAExamFoundation.TCAExamViews.tcaExamViews
             ],
             settings: .settings(
                 base: [
@@ -41,6 +44,7 @@ let project = Project(
             destinations: .iOS,
             product: .unitTests,
             bundleId: "com.grohong.TCAExamTests",
+            deploymentTargets: .iOS(TCAExam.Project.version),
             infoPlist: .default,
             sources: ["Tests/**"],
             resources: [],
@@ -48,4 +52,3 @@ let project = Project(
         ),
     ]
 )
-
