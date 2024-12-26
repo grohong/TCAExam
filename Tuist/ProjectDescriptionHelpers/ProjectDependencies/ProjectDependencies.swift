@@ -37,5 +37,17 @@ public extension TargetDependency {
                 public static let example: TargetDependency = .project(target: "TCAExamViewsExample", path: .relativeToRoot(path))
             }
         }
+
+        public enum Features {
+
+            public enum AlbumList {
+
+                static let path = "Projects/Features/AlbumList"
+
+                public static let albumList: TargetDependency = .project(target: "AlbumList", path: .relativeToRoot(path))
+                public static let tests: TargetDependency = .project(target: "AlbumListTests", path: .relativeToRoot(path))
+                public static let example: TargetDependency = .project(target: "AlbumListExample", path: .relativeToRoot(path))
+            }
+        }
     }
 }

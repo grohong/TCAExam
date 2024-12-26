@@ -10,22 +10,21 @@ import XCTest
 
 final class MusicThumbnailViewModelTests: XCTestCase {
 
+    @MainActor
     func testThumbnailSuccess() async {
         let viewModel = MusicThumbnailViewModel()
 
-        let expectedImage = UIImage(systemName: "photo")!
-        let mockAsset = MockAsset()
-        mockAsset.thumbnailImage = expectedImage
+        let mockAsset = MockAsset(thumbnailImage: UIImage(systemName: "photo")!)
         await viewModel.loadThumbnail(by: mockAsset)
 
         XCTAssertNotNil(viewModel.image, "썸네일이 있을경우 image 반환")
     }
 
+    @MainActor
     func testLoadThumbnailFailure() async {
         let viewModel = MusicThumbnailViewModel()
 
-        let mockAsset = MockAsset()
-        mockAsset.thumbnailImage = nil
+        let mockAsset = MockAsset(thumbnailImage: nil)
         await viewModel.loadThumbnail(by: mockAsset)
 
         XCTAssertNil(viewModel.image, "썸네일이 없을경우 nil 반환")
@@ -35,10 +34,14 @@ final class MusicThumbnailViewModelTests: XCTestCase {
 import AVFoundation
 import UIKit
 
-class MockAsset: ThumbnailGeneratable {
+final class MockAsset: ThumbnailGeneratable {
 
-    var thumbnailImage: UIImage?
+    let thumbnailImage: UIImage?
     var thumbnail: UIImage? {
         get async { thumbnailImage }
+    }
+
+    init(thumbnailImage: UIImage?) {
+        self.thumbnailImage = thumbnailImage
     }
 }

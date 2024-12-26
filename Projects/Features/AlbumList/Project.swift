@@ -9,38 +9,40 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project(
-    name: "TCAExamViews",
+    name: "AlbumList",
     targets: [
         .target(
-            name: "TCAExamViews",
+            name: "AlbumList",
             destinations: .iOS,
             product: .framework,
-            bundleId: "com.grohong.TCAExamViews",
+            bundleId: "com.grohong.AlbumList",
             deploymentTargets: .iOS(TCAExam.Project.version),
             infoPlist: .default,
             sources: ["Sources/**"],
             dependencies: [
-                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities
+                .External.composableArchitecture,
+                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities,
+                .Project.TCAExamFoundation.TCAExamShared.tcaExamShared,
+                .Project.TCAExamFoundation.TCAExamViews.tcaExamViews
             ],
             settings: .swift6
         ),
         .target(
-            name: "TCAExamViewsTests",
+            name: "AlbumListTests",
             destinations: .iOS,
             product: .unitTests,
-            bundleId: "com.grohong.TCAExamViewsTests",
+            bundleId: "com.grohong.AlbumListTests",
             deploymentTargets: .iOS(TCAExam.Project.version),
             infoPlist: .default,
             sources: ["Tests/**"],
             resources: [],
-            dependencies: [.target(name: "TCAExamViews")],
-            settings: .swift6
+            dependencies: [.target(name: "AlbumList")]
         ),
         .target(
-            name: "TCAExamViewsExample",
+            name: "AlbumListExample",
             destinations: .iOS,
             product: .app,
-            bundleId: "com.grohong.TCAExamViewsExample",
+            bundleId: "com.grohong.AlbumListExample",
             deploymentTargets: .iOS(TCAExam.Project.version),
             infoPlist: .extendingDefault(
                 with: [
@@ -48,15 +50,14 @@ let project = Project(
                         "UIColorName": "",
                         "UIImageName": "",
                     ],
+                    "NSAppleMusicUsageDescription": "이 앱은 사용자의 Apple Music 데이터에 접근하여 앨범 정보를 제공합니다."
                 ]
             ),
             sources: ["Example/Sources/**"],
-            resources: ["Example/Resources/**"],
             dependencies: [
-                .target(name: "TCAExamViews"),
-                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities,
-                .Project.TCAExamFoundation.TCAExamShared.tcaExamShared
-            ]
+                .target(name: "AlbumList")
+            ],
+            settings: .swift6
         )
     ]
 )

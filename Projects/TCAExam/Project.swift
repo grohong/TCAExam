@@ -28,10 +28,7 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .External.composableArchitecture,
-                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities,
-                .Project.TCAExamFoundation.TCAExamShared.tcaExamShared,
-                .Project.TCAExamFoundation.TCAExamViews.tcaExamViews
+                .Project.Features.AlbumList.albumList
             ],
             settings: .settings(
                 base: [
