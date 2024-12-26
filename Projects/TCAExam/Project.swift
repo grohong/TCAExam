@@ -1,4 +1,12 @@
+//
+//  Project.swift
+//  Config
+//
+//  Created by Hong Seong Ho on 12/26/24.
+//
+
 import ProjectDescription
+import ProjectDescriptionHelpers
 
 let project = Project(
     name: "TCAExam",
@@ -8,6 +16,7 @@ let project = Project(
             destinations: .iOS,
             product: .app,
             bundleId: "com.grohong.TCAExam",
+            deploymentTargets: .iOS(TCAExam.Project.version),
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -16,9 +25,16 @@ let project = Project(
                     ],
                 ]
             ),
-            sources: ["TCAExam/Sources/**"],
-            resources: ["TCAExam/Resources/**"],
-            dependencies: []
+            sources: ["Sources/**"],
+            resources: ["Resources/**"],
+            dependencies: [
+                .External.composableArchitecture
+            ],
+            settings: .settings(
+                base: [
+                    "ENABLE_USER_SCRIPT_SANDBOXING": "YES",
+                ]
+            )
         ),
         .target(
             name: "TCAExamTests",
@@ -26,9 +42,10 @@ let project = Project(
             product: .unitTests,
             bundleId: "com.grohong.TCAExamTests",
             infoPlist: .default,
-            sources: ["TCAExam/Tests/**"],
+            sources: ["Tests/**"],
             resources: [],
             dependencies: [.target(name: "TCAExam")]
         ),
     ]
 )
+
