@@ -38,6 +38,23 @@ public extension TargetDependency {
             }
         }
 
+        public enum Shared {
+
+            public enum Framework {
+
+                static let path = "Projects/Shared/Framework"
+
+                public static let sharedFramework: TargetDependency = .project(target: "SharedFramework", path: .relativeToRoot(path))
+            }
+
+            public enum Mock {
+
+                static let path = "Projects/Shared/Mock"
+
+                public static let sharedMock: TargetDependency = .project(target: "SharedMock", path: .relativeToRoot(path))
+            }
+        }
+
         public enum Features {
 
             public enum AlbumList {
@@ -47,6 +64,14 @@ public extension TargetDependency {
                 public static let albumList: TargetDependency = .project(target: "AlbumList", path: .relativeToRoot(path))
                 public static let tests: TargetDependency = .project(target: "AlbumListTests", path: .relativeToRoot(path))
                 public static let example: TargetDependency = .project(target: "AlbumListExample", path: .relativeToRoot(path))
+            }
+
+            public enum Album {
+
+                static let path = "Projects/Features/Album"
+
+                public static let album: TargetDependency = .project(target: "Album", path: .relativeToRoot(path))
+                public static let example: TargetDependency = .project(target: "AlbumExample", path: .relativeToRoot(path))
             }
         }
     }

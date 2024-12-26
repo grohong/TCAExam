@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import SharedMock
 import TCAExamShared
 import TCAExamEntities
 import TCAExamViews

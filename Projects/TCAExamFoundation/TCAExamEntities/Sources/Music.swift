@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-public struct Music: Equatable, Identifiable, Codable {
+public struct Music: Equatable, Identifiable, Codable, Sendable {
 
     public let id: UUID
     public let title: String

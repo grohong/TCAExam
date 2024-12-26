@@ -19,27 +19,25 @@ public struct AlbumListView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
-                LazyVGrid(
-                    columns: [
-                        GridItem(.flexible()),
-                        GridItem(.flexible())
-                    ], spacing: 20
-                ) {
-                    ForEach(viewStore.albumList) { album in
-                        Button {
-                            viewStore.send(.didSelectAlbum(album))
-                        } label: {
-                            AlbumCardView(album: album)
-                        }
+        ScrollView {
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible()),
+                    GridItem(.flexible())
+                ], spacing: 20
+            ) {
+                ForEach(store.albumList) { album in
+                    Button {
+                        store.send(.delegate(.didSelectAlbum(album: album)))
+                    } label: {
+                        AlbumCardView(album: album)
                     }
+                }
 
-                }
-                .task {
-                    guard viewStore.albumList.isEmpty == true else { return }
-                    viewStore.send(.fetchAblumList)
-                }
+            }
+            .task {
+                guard store.albumList.isEmpty == true else { return }
+                store.send(.fetchAblumList)
             }
             .navigationTitle("앨범리스트")
         }

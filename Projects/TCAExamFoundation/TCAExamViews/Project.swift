@@ -20,7 +20,8 @@ let project = Project(
             infoPlist: .default,
             sources: ["Sources/**"],
             dependencies: [
-                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities
+                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities,
+                .Project.TCAExamFoundation.TCAExamShared.tcaExamShared
             ],
             settings: .swift6
         ),
@@ -51,11 +52,9 @@ let project = Project(
                 ]
             ),
             sources: ["Example/Sources/**"],
-            resources: ["Example/Resources/**"],
             dependencies: [
                 .target(name: "TCAExamViews"),
-                .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities,
-                .Project.TCAExamFoundation.TCAExamShared.tcaExamShared
+                .Project.Shared.Mock.sharedMock
             ]
         )
     ]

@@ -23,7 +23,10 @@ public struct AlbumListReducer: Sendable{
     public enum Action: Equatable {
         case fetchAblumList
         case albumList([Album])
-        case didSelectAlbum(Album)
+        case delegate(Delegate)
+        public enum Delegate: Equatable {
+            case didSelectAlbum(album: Album)
+        }
     }
 
     @Dependency(\.albumListClient.fetchAlbumList) var fetchAlbumList
@@ -41,7 +44,7 @@ public struct AlbumListReducer: Sendable{
             case .albumList(let albumList):
                 state.albumList = albumList
                 return .none
-            case .didSelectAlbum:
+            default:
                 return .none
             }
         }

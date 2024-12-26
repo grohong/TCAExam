@@ -9,11 +9,13 @@ let package = Package(
 )
 
 #if TUIST
-    import struct ProjectDescription.PackageSettings
+import struct ProjectDescription.PackageSettings
 
-    let packageSettings = PackageSettings(
-        productTypes: [
-            "swift-composable-architecture": .framework,
-        ]
-    )
+let packageSettings = PackageSettings(
+    productTypes: [
+        "ComposableArchitecture": .framework,
+        "Perception": .framework,
+        "XCTestDynamicOverlay": .framework
+    ]
+)
 #endif

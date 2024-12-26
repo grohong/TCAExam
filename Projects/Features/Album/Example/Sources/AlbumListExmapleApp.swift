@@ -7,27 +7,30 @@
 
 import SwiftUI
 import ComposableArchitecture
-import AlbumList
+import TCAExamEntities
+import SharedMock
+import Album
 
 @main
 struct AlbumListExmapleApp: App {
 
     var body: some Scene {
+        let what = Album.mockAlbumList.first!
         WindowGroup {
             if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
                 Text("테스트 중입니다")
             } else {
                 NavigationView {
-                    AlbumListView(
+                    AlbumView(
                         store: .init(
-                            initialState: AlbumListReducer.State(),
-                            reducer: { AlbumListReducer() }
+                            initialState: AlbumReducer.State(album: Album.mockAlbumList.first!),
+                            reducer: { AlbumReducer() }
                         )
                         .scope(
                             state: \.self,
                             action: { action in
-                                if case let .delegate(.didSelectAlbum(album)) = action {
-                                    print("Selected album: \(album.title)")
+                                if case let AlbumReducer.Action.delegate(.playAlbum(album, startIndex)) = action {
+                                    print("Playing album: \(album.title), startIndex: \(startIndex)")
                                 }
                                 return action
                             }

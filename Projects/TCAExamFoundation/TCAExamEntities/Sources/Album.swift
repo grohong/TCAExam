@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Album: Identifiable, Equatable {
+public struct Album: Identifiable, Equatable, Sendable {
 
     public let id: UUID
     public let title: String

@@ -28,11 +28,13 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             dependencies: [
-                .Project.Features.AlbumList.albumList
+                .Project.Features.AlbumList.albumList,
+                .Project.Features.Album.album
             ],
             settings: .settings(
                 base: [
                     "ENABLE_USER_SCRIPT_SANDBOXING": "YES",
+                    "SWIFT_VERSION": "6.0"
                 ]
             )
         ),
