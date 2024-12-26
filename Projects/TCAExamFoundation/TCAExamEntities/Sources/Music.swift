@@ -15,7 +15,7 @@ public struct Music: Equatable, Identifiable, Codable {
     public let assetURL: URL
 
     public var asset: AVAsset? {
-        AVAsset(url: assetURL)
+        AVURLAsset(url: assetURL)
     }
 
     public init(id: UUID, title: String, artist: String, assetURL: URL) {

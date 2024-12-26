@@ -21,7 +21,8 @@ let project = Project(
             sources: ["Sources/**"],
             dependencies: [
                 .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities
-            ]
+            ],
+            settings: .swift6
         ),
         .target(
             name: "TCAExamViewsTests",

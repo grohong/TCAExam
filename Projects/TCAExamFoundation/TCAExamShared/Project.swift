@@ -18,7 +18,8 @@ let project = Project(
             bundleId: "com.grohong.TCAExamShared",
             deploymentTargets: .iOS(TCAExam.Project.version),
             infoPlist: .default,
-            sources: ["Sources/**"]
+            sources: ["Sources/**"],
+            settings: .swift6
         ),
         .target(
             name: "TCAExamSharedTests",

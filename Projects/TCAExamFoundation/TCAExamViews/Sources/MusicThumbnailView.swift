@@ -6,18 +6,25 @@
 //
 
 import SwiftUI
+import AVFoundation
+import TCAExamShared
 
-public protocol ThumbnailGeneratable {
+extension AVAsset: @unchecked @retroactive Sendable { }
+
+extension AVAsset: ThumbnailGeneratable { }
+
+public protocol ThumbnailGeneratable: Sendable {
     var thumbnail: UIImage? { get async }
 }
 
+@MainActor
 public class MusicThumbnailViewModel: ObservableObject {
 
     @Published var image: Image? = nil
 
     func loadThumbnail(by thumbnailGeneratable: ThumbnailGeneratable?) async {
         if let uiImage = await thumbnailGeneratable?.thumbnail {
-            await MainActor.run { self.image = Image(uiImage: uiImage) }
+            self.image = Image(uiImage: uiImage)
         }
     }
 }
@@ -49,8 +56,3 @@ public struct MusicThumbnailView: View {
         .task { await musicThumbnailViewModel.loadThumbnail(by: thumbnailGeneratable) }
     }
 }
-
-import AVFoundation
-import TCAExamShared
-
-extension AVAsset: ThumbnailGeneratable { }
