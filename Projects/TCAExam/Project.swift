@@ -23,6 +23,7 @@ let project = Project(
                         "UIColorName": "",
                         "UIImageName": "",
                     ],
+                    "UIBackgroundModes": ["audio"]
                 ]
             ),
             sources: ["Sources/**"],

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import MusicPlayer
 
 struct AppView: View {
 
@@ -20,6 +21,15 @@ struct AppView: View {
                     action: \.navigationStack
                 )
             )
+
+            if store.state.showPlayer {
+                MusicPlayerView(
+                    store: store.scope(
+                        state: \.musicPlayer,
+                        action: \.musicPlayer
+                    )
+                )
+            }
         }
     }
 }

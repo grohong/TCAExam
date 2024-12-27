@@ -14,8 +14,8 @@ public struct MusicPlayerReducer: Sendable {
     @ObservableState
     public struct State: Equatable {
 
+        public var music: Music?
         var isSheetPresented: Bool = false
-        var music: Music?
         var playingState = PlayingState(
             isPlaying: true,
             currentTimeInSeconds: .zero,
@@ -78,7 +78,9 @@ public struct MusicPlayerReducer: Sendable {
                 state.music = newMusic
                 return .none
             case .startAlbum(let musicList, let index):
-                return .run { _ in await musicPlayerClient.startAlbum((musicList, index)) }
+                return .run { _ in
+                    await musicPlayerClient.startAlbum((musicList, index))
+                }
             case .onTask:
                 return .run { send in
                     await withTaskGroup(of: Void.self) { group in
