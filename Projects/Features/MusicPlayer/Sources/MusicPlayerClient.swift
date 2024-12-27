@@ -8,6 +8,7 @@
 import Foundation
 import Dependencies
 import TCAExamEntities
+import MusicPlayerManager
 
 struct MusicPlayerClient {
 
@@ -23,13 +24,23 @@ struct MusicPlayerClient {
 extension MusicPlayerClient: DependencyKey {
 
     static let liveValue = Self(
-        play: { },
-        pause: { },
-        startAlbum: { musicList, index in },
-        nextPlay: { },
-        prevPlay: { },
-        currentMusic: { AsyncStream { continuation in } },
-        playingState: { AsyncStream { continuation in } }
+        play: { MusicPlayerManager.shared.play() },
+        pause: { MusicPlayerManager.shared.pause() },
+        startAlbum: { musicList, index in MusicPlayerManager.shared.startPlay(musicList: musicList, index: index) },
+        nextPlay: { MusicPlayerManager.shared.nextPlay() },
+        prevPlay: { MusicPlayerManager.shared.prevPlay() },
+        currentMusic: {
+            AsyncStream { continuation in
+                let musicPlayerManager = MusicPlayerManager.shared
+                Task { await musicPlayerManager.configureCurrentMusicContinuation(continuation) }
+            }
+        },
+        playingState: {
+            AsyncStream { continuation in
+                let musicPlayerManager = MusicPlayerManager.shared
+                Task { await musicPlayerManager.configurePlayingStateContinuation(continuation) }
+            }
+        }
     )
 
     static let testValue = Self(

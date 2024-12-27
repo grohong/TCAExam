@@ -38,23 +38,6 @@ public extension TargetDependency {
             }
         }
 
-        public enum Shared {
-
-            public enum Framework {
-
-                static let path = "Projects/Shared/Framework"
-
-                public static let sharedFramework: TargetDependency = .project(target: "SharedFramework", path: .relativeToRoot(path))
-            }
-
-            public enum Mock {
-
-                static let path = "Projects/Shared/Mock"
-
-                public static let sharedMock: TargetDependency = .project(target: "SharedMock", path: .relativeToRoot(path))
-            }
-        }
-
         public enum Features {
 
             public enum AlbumList {
@@ -81,6 +64,34 @@ public extension TargetDependency {
                 public static let musicPlayer: TargetDependency = .project(target: "MusicPlayer", path: .relativeToRoot(path))
                 public static let tests: TargetDependency = .project(target: "MusicPlayerTests", path: .relativeToRoot(path))
                 public static let example: TargetDependency = .project(target: "MusicPlayerExample", path: .relativeToRoot(path))
+            }
+        }
+
+        public enum Manager {
+
+            public enum MusicPlayerManager {
+
+                static let path = "Projects/Manager/MusicPlayerManager"
+
+                public static let musicPlayerManager: TargetDependency = .project(target: "MusicPlayerManager", path: .relativeToRoot(path))
+                public static let tests: TargetDependency = .project(target: "MusicPlayerManagerTests", path: .relativeToRoot(path))
+            }
+        }
+
+        public enum Shared {
+
+            public enum Framework {
+
+                static let path = "Projects/Shared/Framework"
+
+                public static let sharedFramework: TargetDependency = .project(target: "SharedFramework", path: .relativeToRoot(path))
+            }
+
+            public enum Mock {
+
+                static let path = "Projects/Shared/Mock"
+
+                public static let sharedMock: TargetDependency = .project(target: "SharedMock", path: .relativeToRoot(path))
             }
         }
     }

@@ -21,7 +21,8 @@ let project = Project(
             sources: ["Sources/**"],
             dependencies: [
                 .Project.Shared.Framework.sharedFramework,
-                .Project.TCAExamFoundation.TCAExamViews.tcaExamViews
+                .Project.TCAExamFoundation.TCAExamViews.tcaExamViews,
+                .Project.Manager.MusicPlayerManager.musicPlayerManager
             ],
             settings: .swift6
         ),
@@ -48,11 +49,13 @@ let project = Project(
                         "UIColorName": "",
                         "UIImageName": "",
                     ],
+                    "UIBackgroundModes": ["audio"]
                 ]
             ),
             sources: ["Example/Sources/**"],
             dependencies: [
-                .target(name: "MusicPlayer")
+                .target(name: "MusicPlayer"),
+                .Project.Shared.Mock.sharedMock
             ],
             settings: .swift6
         )

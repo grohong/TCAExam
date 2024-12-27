@@ -46,6 +46,8 @@ public struct MusicPlayerReducer: Sendable {
         case prevPlay
         case playStateChanged(PlayingState)
         case onTask
+        case startAlbum([Music], Int)
+        case currentMusicChanged(Music?)
     }
 
     @Dependency(\.musicPlayerClient) var musicPlayerClient
@@ -72,17 +74,30 @@ public struct MusicPlayerReducer: Sendable {
             case .playStateChanged(let playingState):
                 state.playingState = playingState
                 return .none
+            case let .currentMusicChanged(newMusic):
+                state.music = newMusic
+                return .none
+            case .startAlbum(let musicList, let index):
+                return .run { _ in await musicPlayerClient.startAlbum((musicList, index)) }
             case .onTask:
                 return .run { send in
-                    await self.onTask(send: send)
+                    await withTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            for await playingState in musicPlayerClient.playingState() {
+                                await send(.playStateChanged(playingState))
+                            }
+                        }
+
+                        group.addTask {
+                            for await music in musicPlayerClient.currentMusic() {
+                                await send(.currentMusicChanged(music))
+                            }
+                        }
+
+                        await group.waitForAll()
+                    }
                 }
             }
-        }
-    }
-
-    private func onTask(send: Send<Action>) async {
-        for await playingState in self.musicPlayerClient.playingState() {
-            await send(.playStateChanged(playingState))
         }
     }
 }

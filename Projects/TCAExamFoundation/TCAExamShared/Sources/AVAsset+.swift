@@ -39,3 +39,4 @@ extension AVAsset {
 }
 
 extension AVMetadataItem: @unchecked @retroactive Sendable {}
+extension AVAsset: @unchecked @retroactive Sendable {}
