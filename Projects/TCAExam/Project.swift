@@ -29,7 +29,8 @@ let project = Project(
             resources: ["Resources/**"],
             dependencies: [
                 .Project.Features.AlbumList.albumList,
-                .Project.Features.Album.album
+                .Project.Features.Album.album,
+                .Project.Features.MusicPlayer.musicPlayer
             ],
             settings: .settings(
                 base: [

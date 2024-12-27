@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PlayingState: Equatable {
+public struct PlayingState: Equatable, Sendable {
 
     public let isPlaying: Bool
     public let currentTimeInSeconds: Float64

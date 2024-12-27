@@ -73,6 +73,15 @@ public extension TargetDependency {
                 public static let album: TargetDependency = .project(target: "Album", path: .relativeToRoot(path))
                 public static let example: TargetDependency = .project(target: "AlbumExample", path: .relativeToRoot(path))
             }
+
+            public enum MusicPlayer {
+
+                static let path = "Projects/Features/MusicPlayer"
+
+                public static let musicPlayer: TargetDependency = .project(target: "MusicPlayer", path: .relativeToRoot(path))
+                public static let tests: TargetDependency = .project(target: "MusicPlayerTests", path: .relativeToRoot(path))
+                public static let example: TargetDependency = .project(target: "MusicPlayerExample", path: .relativeToRoot(path))
+            }
         }
     }
 }

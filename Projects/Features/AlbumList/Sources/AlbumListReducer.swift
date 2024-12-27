@@ -9,7 +9,7 @@ import ComposableArchitecture
 import TCAExamEntities
 
 @Reducer
-public struct AlbumListReducer: Sendable{
+public struct AlbumListReducer: Sendable {
 
     @ObservableState
     public struct State: Equatable {
