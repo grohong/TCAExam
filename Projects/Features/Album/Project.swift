@@ -41,7 +41,8 @@ let project = Project(
             ),
             sources: ["Example/Sources/**"],
             dependencies: [
-                .target(name: "Album")
+                .target(name: "Album"),
+                .Project.Shared.Mock.sharedMock
             ],
             settings: .swift6
         )

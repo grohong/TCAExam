@@ -15,7 +15,6 @@ import Album
 struct AlbumListExmapleApp: App {
 
     var body: some Scene {
-        let what = Album.mockAlbumList.first!
         WindowGroup {
             if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
                 Text("테스트 중입니다")
