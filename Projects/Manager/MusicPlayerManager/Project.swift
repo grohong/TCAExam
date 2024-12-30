@@ -20,7 +20,6 @@ let project = Project(
             infoPlist: .default,
             sources: ["Sources/**"],
             dependencies: [
-                .Project.Shared.Framework.sharedFramework,
                 .Project.TCAExamFoundation.TCAExamEntities.tcaExamEntities,
                 .Project.TCAExamFoundation.TCAExamShared.tcaExamShared
             ],
